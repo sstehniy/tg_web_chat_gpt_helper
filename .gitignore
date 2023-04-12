@@ -21,3 +21,6 @@ node_modules/
 
 # Windows files
 Thumbs.db
+
+tg_web_chat_gpt_helper/
+package-lock.json
