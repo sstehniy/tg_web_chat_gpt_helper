@@ -1,12 +1,20 @@
 import { createRoot } from "react-dom/client";
-import { UrlContextProvider } from "./context/url";
+import { UrlContextProvider, useUrlContext } from "./context/url";
 
 const Root = () => {
+  const { isTelegramOpened } = useUrlContext();
+
+  if (!isTelegramOpened) return null;
   return <div>Hello world</div>;
 };
 
-const renderApp = () => {
-  const root = createRoot(document.getElementById("root")!);
+const render = () => {
+  const input = document.querySelector(".new-message-wrapper");
+  if (!input) return;
+  const container = document.createElement("div");
+  container.id = "tg_gpt_helper_root";
+  input.appendChild(container);
+  const root = createRoot(container);
   root.render(
     <UrlContextProvider>
       <Root />
@@ -14,8 +22,12 @@ const renderApp = () => {
   );
 };
 
-const render = () => {
-  renderApp();
-};
+const observer = new MutationObserver(() => {
+  if (document.querySelector(".new-message-wrapper")) {
+    render();
+  }
+});
 
-render();
+observer.observe(document.body, {
+  childList: true
+});

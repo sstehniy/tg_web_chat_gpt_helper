@@ -2,6 +2,7 @@ import {
   FC,
   PropsWithChildren,
   createContext,
+  useContext,
   useEffect,
   useState
 } from "react";
@@ -10,7 +11,10 @@ import { BackgroundMessage, BackgroundMessageEnum } from "../types";
 type UrlContextType = {
   isTelegramOpened: boolean;
 };
+
 const UrlContext = createContext<UrlContextType>({ isTelegramOpened: false });
+
+export const useUrlContext = () => useContext(UrlContext);
 
 const UrlContextProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [isTelegramOpened, setIsTelegramOpened] = useState(false);
