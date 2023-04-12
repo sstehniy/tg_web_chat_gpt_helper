@@ -12,5 +12,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
   },
+  "outDir": "tg_web_chat_gpt_helper",
+  "exclude": ["node_modules"],
   "include": ["src/**/*"]
 }

@@ -4,10 +4,20 @@
   "version": "1.0",
   "manifest_version": 3,
   "permissions": [
-    "activeTab",
-    "scripting"
+    "activeTab", "tabs", "nativeMessaging"
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self';"
+  },
+  "content_scripts": [{
+    "matches": [
+      "<all_urls>"
+    ],
+    "js": [
+      "content.js"
+    ]
+  }]
 }

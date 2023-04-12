@@ -20,9 +20,10 @@ const UrlContextProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [isTelegramOpened, setIsTelegramOpened] = useState(false);
   useEffect(() => {
     chrome.runtime.onMessage.addListener((request: BackgroundMessage) => {
+      console.warn(JSON.stringify(request));
       if (request.message === BackgroundMessageEnum.UrlUpdate) {
         const url = request.url;
-        const isUrlMatched = url.match(/^https:\/\/web\.telegram\.org\/[kz]\//);
+        const isUrlMatched = url.startsWith("https://web.telegram.org");
         setIsTelegramOpened(!!isUrlMatched);
       }
     });
