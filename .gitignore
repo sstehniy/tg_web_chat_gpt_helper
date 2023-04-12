@@ -1,0 +1,23 @@
+# Logs
+logs
+*.log
+
+# Compiled output
+dist
+node_modules
+
+# Dependency directories
+node_modules/
+
+# Typescript files
+*.tsbuildinfo
+
+# IDE files
+.vscode/
+.idea/
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
