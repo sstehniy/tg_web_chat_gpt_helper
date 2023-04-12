@@ -16,7 +16,24 @@ module.exports = {
   module: {
     rules: [
       { test: /\.tsx?$/, loader: "ts-loader" },
-      { test: /\.css$/, use: ["style-loader", "css-loader"] }
+      {
+        test: /\.css$/i,
+        include: path.resolve(__dirname, "src"),
+        use: ["style-loader", "css-loader", "postcss-loader"]
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          "@svgr/webpack",
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8192, // Inline files smaller than 8KB as data URIs
+              name: "./src/assets/[name].[ext]"
+            }
+          }
+        ]
+      }
     ]
   },
 

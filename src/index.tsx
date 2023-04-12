@@ -1,8 +1,13 @@
 import { createRoot } from "react-dom/client";
-import { BackgroundMessageEnum } from "./types";
+import { ReactComponent as Logo } from "./assets/chat_gpt_logo.svg";
+import "./style.css";
 
 const Root = () => {
-  return <div>Hello world</div>;
+  return (
+    <div className="flex justify-center items-center">
+      <Logo width={24} height={24} fill="#aaaaaa" />
+    </div>
+  );
 };
 
 const render = () => {
@@ -11,11 +16,10 @@ const render = () => {
     document.removeChild(appContainer);
   }
   const input = document.querySelector(".new-message-wrapper");
-  console.warn(JSON.stringify(input));
   if (!input) return;
   const container = document.createElement("div");
-  container.id = "tg_gpt_helper_root";
-  input.prepend(container);
+  container.className = "btn-icon";
+  input.append(container);
   const root = createRoot(container);
   root.render(<Root />);
 };
