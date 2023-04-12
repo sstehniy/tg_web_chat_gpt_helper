@@ -1,11 +1,7 @@
 import { createRoot } from "react-dom/client";
-import { UrlContextProvider, useUrlContext } from "./context/url";
 import { BackgroundMessageEnum } from "./types";
 
 const Root = () => {
-  const { isTelegramOpened } = useUrlContext();
-  console.warn("isTelegramOpened", isTelegramOpened);
-  if (!isTelegramOpened) return null;
   return <div>Hello world</div>;
 };
 
@@ -21,11 +17,7 @@ const render = () => {
   container.id = "tg_gpt_helper_root";
   input.prepend(container);
   const root = createRoot(container);
-  root.render(
-    <UrlContextProvider>
-      <Root />
-    </UrlContextProvider>
-  );
+  root.render(<Root />);
 };
 
 const observer = new MutationObserver(() => {
