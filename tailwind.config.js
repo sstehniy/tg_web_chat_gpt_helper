@@ -1,11 +1,7 @@
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  theme: {
-    extend: {}
-  },
-  plugins: [require("tailwindcss"), require("autoprefixer")],
-  variants: {},
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  plugins: [require("daisyui")],
   corePlugins: {
-    preflight: true
+    preflight: false
   }
 };

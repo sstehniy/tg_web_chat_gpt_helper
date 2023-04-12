@@ -1,11 +1,18 @@
 import { createRoot } from "react-dom/client";
 import { ReactComponent as Logo } from "./assets/chat_gpt_logo.svg";
 import "./style.css";
+import { useState } from "react";
+import { GPTMenu } from "./components/GPTMenu";
 
 const Root = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
-    <div className="flex justify-center items-center">
+    <div
+      className="flex justify-center items-center"
+      onClick={() => setIsMenuOpen((prev) => !prev)}
+    >
       <Logo width={24} height={24} fill="#aaaaaa" />
+      {isMenuOpen && <GPTMenu />}
     </div>
   );
 };
@@ -19,6 +26,7 @@ const render = () => {
   if (!input) return;
   const container = document.createElement("div");
   container.className = "btn-icon";
+  container.style.position = "static";
   input.append(container);
   const root = createRoot(container);
   root.render(<Root />);

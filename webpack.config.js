@@ -17,9 +17,12 @@ module.exports = {
     rules: [
       { test: /\.tsx?$/, loader: "ts-loader" },
       {
-        test: /\.css$/i,
-        include: path.resolve(__dirname, "src"),
-        use: ["style-loader", "css-loader", "postcss-loader"]
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          { loader: "css-loader", options: { importLoaders: 1 } },
+          "postcss-loader"
+        ]
       },
       {
         test: /\.svg$/,
