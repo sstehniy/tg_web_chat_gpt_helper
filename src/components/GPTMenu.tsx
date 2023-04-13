@@ -1,20 +1,22 @@
-export const GPTMenu: React.FC = () => {
+import { forwardRef, useState } from "react";
+import { useGptApi } from "../context/gptApi";
+import { KeySetup } from "./KeySetup";
+import { PropmtForm } from "./PromptForm";
+
+export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
+  const { isAuthorized } = useGptApi();
+
   return (
     <ul
-      className="menu bg-base-100 w-56 !ps-2 p-2 rounded-box absolute bottom-9 right-0"
+      className="text text-lg !ps-4 p-4 rounded-2xl absolute bottom-11 right-0 shadow-xl w-auto"
       style={{
-        backgroundColor: "#212121"
+        backgroundColor: "var(--surface-color)",
+        color: "var(--primary-text-color)"
       }}
+      ref={ref}
     >
-      <li>
-        <a>Item 1</a>
-      </li>
-      <li>
-        <a>Item 2</a>
-      </li>
-      <li>
-        <a>Item 3</a>
-      </li>
+      <h3 className="m-0">ChatGPT Telegram Assistant</h3>
+      {!isAuthorized ? <KeySetup /> : <PropmtForm />}
     </ul>
   );
-};
+});

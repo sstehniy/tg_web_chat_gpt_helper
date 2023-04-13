@@ -3,8 +3,13 @@
   "description": "This extension is made for demonstration purposes",
   "version": "1.0",
   "manifest_version": 3,
+  "host_permissions": [
+    "https://web.telegram.org/*"
+  ],
   "permissions": [
-    "activeTab", "tabs", "nativeMessaging"
+    "activeTab", "tabs", "nativeMessaging",
+    "storage",
+    "scripting"
   ],
   "background": {
     "service_worker": "background.js"
@@ -14,7 +19,7 @@
   },
   "content_scripts": [{
     "matches": [
-      "<all_urls>"
+      "https://web.telegram.org/*"
     ],
     "js": [
       "content.js"

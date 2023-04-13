@@ -1,22 +1,20 @@
 import { BackgroundMessageEnum } from "./types";
 
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (
-      changeInfo.status === "complete" ||
-      changeInfo.url?.startsWith("https://web.telegram.org")
-    ) {
-      console.warn("onUpdated", tabId, changeInfo, tab);
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (
+    changeInfo.status === "complete" &&
+    changeInfo.url?.startsWith("https://web.telegram.org")
+  ) {
+    console.warn("onUpdated", tabId, changeInfo, tab);
 
-      chrome.tabs
-        .sendMessage(tabId, {
-          type: "onUpdated",
-          message: BackgroundMessageEnum.UrlUpdate,
-          url: tab.url
-        })
-        .then((response) => {
-          console.warn("onUpdated response", response);
-        });
-    }
-  });
+    chrome.tabs
+      .sendMessage(tabId, {
+        type: "onUpdated",
+        message: BackgroundMessageEnum.UrlUpdate,
+        url: tab.url
+      })
+      .then((response) => {
+        console.warn("onUpdated response", response);
+      });
+  }
 });
