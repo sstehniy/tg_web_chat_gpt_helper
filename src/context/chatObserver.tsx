@@ -28,15 +28,11 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
   const [companion, setCompanion] = useState<string | null>(null);
   useEffect(() => {
     const handleOnMessage = (message: any) => {
-      console.log(message.url);
       if (message.url !== updatedUrl) {
         setUpdatedUrl(message.url);
       }
     };
     chrome.runtime.onMessage.addListener(handleOnMessage);
-    return () => {
-      chrome.runtime.onMessage.removeListener(handleOnMessage);
-    };
   }, [updatedUrl]);
 
   const handleUpdateContextMessages = useCallback(() => {
@@ -72,21 +68,20 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
         return { content, isOwn };
       }
     );
-    console.log(newContextMessages);
+
     setContextMessages(newContextMessages);
   }, []);
 
   useEffect(() => {
     const titleObserver = new MutationObserver(() => {
       if (document.querySelector(".top .user-title")?.firstChild) {
-        console.log("set companion");
         setCompanion(
           document.querySelector(".top .user-title")!.firstChild!.textContent
         );
         titleObserver.disconnect();
       }
     });
-    titleObserver.observe(document.querySelector(".top")!, {
+    titleObserver.observe(document.body, {
       childList: true,
       subtree: true
     });
@@ -97,6 +92,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
       const replyButton = document.querySelector(".reply-icon");
       if (!replyButton) {
         setSelectedMessage(null);
+        return;
       } else {
         const replyToPeer = document.querySelector(
           ".reply-wrapper .reply-title > .peer-title"
@@ -104,37 +100,45 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
         if (!replyToPeer) {
           return;
         }
-        console.log(replyToPeer, companion);
+
         const messageType: OutputMessageType = companion
           ? replyToPeer === companion
             ? OutputMessageType.REPLY
             : OutputMessageType.FOLLOWUP
           : OutputMessageType.FOLLOWUP;
-        console.log(
-          document.querySelectorAll(".reply-wrapper .reply-subtitle")
-        );
         const content = document.querySelector(
           ".reply-wrapper .reply-subtitle"
         )?.textContent;
         if (!content) {
           return;
         }
-        const selectedMessage: ContextMessage = {
+        const newSelectedMessage: ContextMessage = {
           content,
           isOwn: messageType === OutputMessageType.FOLLOWUP
         };
-        setSelectedMessage(selectedMessage);
+
+        if (
+          !selectedMessage ||
+          selectedMessage.content !== newSelectedMessage.content
+        ) {
+          console.log(selectedMessage?.content, newSelectedMessage.content);
+          setSelectedMessage(newSelectedMessage);
+        }
       }
     });
 
-    observer.observe(document.querySelector(".chat-input")!, {
-      attributes: true,
+    observer.observe(document.body, {
       childList: true,
       subtree: true
     });
-  }, [companion, updatedUrl]);
+    return () => {
+      observer.disconnect();
+    };
+  }, [companion, selectedMessage, updatedUrl]);
 
   useEffect(() => {
+    setContextMessages([]);
+
     const chatObserver = new MutationObserver(() => {
       handleUpdateContextMessages();
       chatObserver.disconnect();
@@ -147,8 +151,6 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
 
   useEffect(() => {
     if (!companion) return;
-    setContextMessages([]);
-    setSelectedMessage(null);
     if (document.querySelector(".chat-input.is-hidden")) {
       return;
     }
