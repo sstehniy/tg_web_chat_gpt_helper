@@ -1,7 +1,8 @@
 import { createRoot } from "react-dom/client";
 import { GptApiProvider } from "./context/gptApi";
-import { Root } from "./components/Root";
+import { Root } from "./Root";
 import "./style.css";
+import { ChatObserverProvider } from "./context/chatObserver";
 
 const renderK = () => {
   const appContainer = document.querySelector("#tg_gpt_helper_root");
@@ -15,9 +16,11 @@ const renderK = () => {
   input.append(container);
   const root = createRoot(container);
   root.render(
-    <GptApiProvider>
-      <Root />
-    </GptApiProvider>
+    <ChatObserverProvider>
+      <GptApiProvider>
+        <Root />
+      </GptApiProvider>
+    </ChatObserverProvider>
   );
 };
 
