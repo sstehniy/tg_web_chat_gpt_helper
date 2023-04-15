@@ -2,17 +2,12 @@ import { ReactComponent as Logo } from "../assets/chat_gpt_logo.svg";
 import "../gpt-menu.css";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { useClickAway } from "../hooks/useClickAway";
-import { GptMenu } from "./GPTMenu";
+import { GptMenu } from "./components/GptMenu";
 
 export const Root = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef(null);
-
-  // useClickAway(wrapperRef, () => {
-  //   setIsMenuOpen(false);
-  // });
 
   return (
     <div ref={wrapperRef} style={{ position: "static" }}>
