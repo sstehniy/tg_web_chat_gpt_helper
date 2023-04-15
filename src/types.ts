@@ -10,7 +10,6 @@ export type BackgroundMessage = {
 export type ContextMessage = {
   content: string;
   isOwn: boolean;
-  timeSent: string;
 };
 
 export enum OutputMessageType {

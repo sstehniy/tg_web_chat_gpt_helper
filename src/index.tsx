@@ -25,6 +25,7 @@ const renderK = () => {
 };
 
 const observer = new MutationObserver(() => {
+  console.log("here");
   if (document.querySelector(".new-message-wrapper")) {
     renderK();
     observer.disconnect();
