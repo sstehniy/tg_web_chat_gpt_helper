@@ -89,8 +89,10 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
-      const replyButton = document.querySelector(".reply-icon");
-      if (!replyButton) {
+      const isHelperActive = document.querySelector(
+        ".chat.tabs-tab.active.is-helper-active"
+      );
+      if (!isHelperActive) {
         setSelectedMessage(null);
         return;
       } else {
