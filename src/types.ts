@@ -14,9 +14,10 @@ export type ContextMessage = {
 
 export enum OutputMessageType {
   REPLY = "REPLY",
-  FOLLOWUP = "FOLLOWUP"
+  COMPLEMENT = "COMPLEMENT"
 }
 
 export enum PromptType {
-  SMART_PROMPT = "SMART_PROMPT"
+  SMART_PROMPT = "SMART_PROMPT",
+  CUSTOM_PROMPT = "CUSTOM_PROMPT"
 }
