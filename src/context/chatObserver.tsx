@@ -3,6 +3,7 @@ import {
   PropsWithChildren,
   createContext,
   useCallback,
+  useContext,
   useEffect,
   useState
 } from "react";
@@ -11,11 +12,15 @@ import { ContextMessage, OutputMessageType } from "../types";
 type ChatObserverContextType = {
   contextMessages: ContextMessage[];
   selectedMessage: ContextMessage | null;
+  updatedUrl: string;
+  handleUpdateContextMessages: () => void;
 };
 
 const ChatObserverContext = createContext(
   null as unknown as ChatObserverContextType
 );
+
+export const useChatObserver = () => useContext(ChatObserverContext);
 
 export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
   children
@@ -56,7 +61,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
           return { contentWrapper, isOwn };
         });
       })
-      .slice(-5);
+      .slice(-10);
 
     const newContextMessages = bubblesWithTextWrappers.map(
       ({ contentWrapper, isOwn }) => {
@@ -106,8 +111,8 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
         const messageType: OutputMessageType = companion
           ? replyToPeer === companion
             ? OutputMessageType.REPLY
-            : OutputMessageType.FOLLOWUP
-          : OutputMessageType.FOLLOWUP;
+            : OutputMessageType.COMPLEMENT
+          : OutputMessageType.COMPLEMENT;
         const content = document.querySelector(
           ".reply-wrapper .reply-subtitle"
         )?.textContent;
@@ -116,7 +121,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
         }
         const newSelectedMessage: ContextMessage = {
           content,
-          isOwn: messageType === OutputMessageType.FOLLOWUP
+          isOwn: messageType === OutputMessageType.COMPLEMENT
         };
 
         if (
@@ -142,6 +147,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     setContextMessages([]);
 
     const chatObserver = new MutationObserver(() => {
+      if (!companion) return;
       handleUpdateContextMessages();
       chatObserver.disconnect();
     });
@@ -149,7 +155,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
       childList: true,
       subtree: true
     });
-  }, [handleUpdateContextMessages, updatedUrl]);
+  }, [handleUpdateContextMessages, updatedUrl, companion]);
 
   useEffect(() => {
     if (!companion) return;
@@ -167,9 +173,18 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     console.log(selectedMessage);
   }, [selectedMessage]);
 
+  useEffect(() => {
+    console.log(contextMessages);
+  }, [contextMessages]);
+
   return (
     <ChatObserverContext.Provider
-      value={{ contextMessages: [], selectedMessage: null }}
+      value={{
+        contextMessages,
+        selectedMessage,
+        updatedUrl,
+        handleUpdateContextMessages
+      }}
     >
       {children}
     </ChatObserverContext.Provider>
