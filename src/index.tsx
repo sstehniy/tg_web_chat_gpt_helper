@@ -3,6 +3,7 @@ import { GptApiProvider } from "./context/gptApi";
 import { Root } from "./Root";
 import "./style.css";
 import { ChatObserverProvider } from "./context/chatObserver";
+import { OpenaiClientProvider } from "./context/openaiClient";
 
 const renderK = () => {
   const appContainer = document.querySelector("#tg_gpt_helper_root");
@@ -17,9 +18,9 @@ const renderK = () => {
   const root = createRoot(container);
   root.render(
     <ChatObserverProvider>
-      <GptApiProvider>
+      <OpenaiClientProvider>
         <Root />
-      </GptApiProvider>
+      </OpenaiClientProvider>
     </ChatObserverProvider>
   );
 };
