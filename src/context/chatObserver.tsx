@@ -71,7 +71,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
       }
     );
 
-    setContextMessages(newContextMessages);
+    setContextMessages(newContextMessages.filter((message) => message.content));
   }, []);
 
   useEffect(() => {
@@ -141,13 +141,11 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
   }, [companion, selectedMessage, updatedUrl]);
 
   useEffect(() => {
-    setContextMessages([]);
-
     const chatObserver = new MutationObserver(() => {
       if (!companion) return;
       handleUpdateContextMessages();
     });
-    chatObserver.observe(document.querySelector(".bubbles")!, {
+    chatObserver.observe(document.querySelector(".bubbles-inner")!, {
       childList: true,
       subtree: true
     });
