@@ -1,6 +1,6 @@
 {
   "name": "Telegram Web ChatGPT Helper",
-  "description": "This extension is made for demonstration purposes",
+  "description": "This extension allows you to use ChatGPT with Telegram Web",
   "version": "1.0",
   "manifest_version": 3,
   "host_permissions": [
