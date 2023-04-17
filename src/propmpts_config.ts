@@ -67,10 +67,10 @@ export const prompts: Record<PromptType, string> = {
   These messages should be used as the conversation context.  The last message is marked as SELECTED. Such a message looks like this:
   
   > SELETED: [MESSAGE]
+
   
-  Each input ends with "Output type: REPLY"
-  
-  If the output type is REPLY, your task is given the context, create a reply to the message from the logs starting wiht SELECTED. You should analyze the logs to create a sensible message. Return only the output message without log foramtting. After the logs there will be given a list of additional infos to take in account when creating the output.
+If the output type is REPLY, your task is to create a reply to the message marked as SELECTED. You must analyze the logs and when it makes sense to you, use the context to create the reply, otherwise do not use the log for generating the reply to the last message. Return only the output message without log foramtting. After the logs there will be given a list of additional infos to take in account when creating the output.
+
   
   LOG: 
   {{LOGS}}
@@ -88,10 +88,10 @@ export const prompts: Record<PromptType, string> = {
   These messages should be used as the conversation context.  The last message is marked as SELECTED. Such a message looks like this:
   
   > SELETED: [MESSAGE]
+
   
-  Each input ends with "Output type: REPLY"
-  
-  If the output type is REPLY, your task is given the context, create a reply to the message from the logs starting wiht SELECTED. You should analyze the logs to create a sensible message. Return only the output message without log foramtting. After the logs there will be given a list of additional infos to take in account when creating the output.
+If the output type is REPLY, your task is to create a reply to the message marked as SELECTED. You must analyze the logs and when it makes sense to you, use the context to create the reply, otherwise do not use the log for generating the reply to the last message. Return only the output message without log foramtting. After the logs there will be given a list of additional infos to take in account when creating the output.
+
   
   LOG: 
   {{LOGS}}
