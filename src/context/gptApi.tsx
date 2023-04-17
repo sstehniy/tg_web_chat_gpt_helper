@@ -8,7 +8,7 @@ import {
   useRef,
   useState
 } from "react";
-import { Configuration, OpenAIApi } from "openai";
+import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { ContextMessage, OutputMessageType } from "../types";
 import { prompts } from "../propmpts_config";
 import { useChatObserver } from "./chatObserver";
@@ -25,6 +25,11 @@ type GptApiContextType = {
     customTone: string,
     customStyle: string
   ) => Promise<void>;
+  handleSendComposeMessage: (
+    messages: ChatCompletionRequestMessage[]
+  ) => Promise<void>;
+  setChatFormMessages: (messages: ChatCompletionRequestMessage[]) => void;
+  composeFormMessages: ChatCompletionRequestMessage[];
   currentSmartReplies: string[];
   currentCustomReplies: string[];
 };
@@ -52,6 +57,9 @@ export const GptApiProvider: FC<PropsWithChildren<unknown>> = ({
   const [currentCustomReplies, setCurrentCustomReplies] = useState<string[]>(
     []
   );
+  const [composeFormMessages, setChatFormMessages] = useState<
+    ChatCompletionRequestMessage[]
+  >([]);
   const { contextMessages, selectedMessage, updatedUrl } = useChatObserver();
 
   useEffect(() => {
@@ -70,6 +78,34 @@ export const GptApiProvider: FC<PropsWithChildren<unknown>> = ({
     });
   }, []);
 
+  const handleSendComposeMessage = useCallback(
+    async (messages: ChatCompletionRequestMessage[]) => {
+      console.log(messages);
+      try {
+        const response = await client.createChatCompletion({
+          ...baseApiOptions,
+          messages
+        });
+        console.log(response.data.choices[0].message);
+        if (
+          response.data.choices[0].message &&
+          "content" in response.data.choices[0].message
+        ) {
+          setChatFormMessages([
+            ...messages,
+            response.data.choices[0].message as ChatCompletionRequestMessage
+          ]);
+        }
+      } catch (e) {
+        console.error("Erroro", e);
+      }
+    },
+    []
+  );
+  useEffect(() => {
+    console.log("composeFormMessages", composeFormMessages);
+  }, [composeFormMessages]);
+
   const handleCreateCustomReply = useCallback(
     async (
       customPrompt: string,
@@ -79,6 +115,14 @@ export const GptApiProvider: FC<PropsWithChildren<unknown>> = ({
     ) => {
       if (!selectedMessage) return;
       let output = "";
+      const cutContextMessages = contextMessages
+        .slice(
+          0,
+          contextMessages.findIndex(
+            (message) => message.content === selectedMessage.content
+          )
+        )
+        .slice(-10);
       try {
         const response = await client.createChatCompletion({
           ...baseApiOptions,
@@ -86,7 +130,7 @@ export const GptApiProvider: FC<PropsWithChildren<unknown>> = ({
             {
               content: consturctCustomPrompt(
                 selectedMessage,
-                contextMessages,
+                cutContextMessages,
                 customPrompt,
                 customLanguage,
                 customTone,
@@ -110,12 +154,20 @@ export const GptApiProvider: FC<PropsWithChildren<unknown>> = ({
   const handleCreateSmartReply = useCallback(async () => {
     if (!selectedMessage) return;
     let output = "";
+    const cutContextMessages = contextMessages
+      .slice(
+        0,
+        contextMessages.findIndex(
+          (message) => message.content === selectedMessage.content
+        )
+      )
+      .slice(-10);
     try {
       const response = await client.createChatCompletion({
         ...baseApiOptions,
         messages: [
           {
-            content: consturctSmartPrompt(selectedMessage, contextMessages),
+            content: consturctSmartPrompt(selectedMessage, cutContextMessages),
             role: "user"
           }
         ]
@@ -161,7 +213,10 @@ export const GptApiProvider: FC<PropsWithChildren<unknown>> = ({
         handleSetToken,
         handleCreateSmartReply,
         handleCreateCustomReply,
+        handleSendComposeMessage,
+        setChatFormMessages,
         currentCustomReplies,
+        composeFormMessages,
         currentSmartReplies
       }}
     >
@@ -222,7 +277,7 @@ const consturctCustomPrompt = (
         ? "The language of the SELECTED message"
         : customLanguage
     )
-    .replace("{{CUSTOM_PROMPT}}", customPrompt || "")
+    .replace("{{CUSTOM_PROMPT}}", customPrompt || "none")
     .replace("{{OUTPUT_TONE}}", customTone)
     .replace("{{OUTPUT_WRITING_STYLE}}", customStyle);
 

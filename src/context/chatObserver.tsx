@@ -50,19 +50,16 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     const flatBubbles = latestBubbles.flatMap((bubblesGroup) => {
       return Array.from(bubblesGroup.querySelectorAll(".bubble"));
     });
-    const bubblesWithTextWrappers = flatBubbles
-      .flatMap((bubble) => {
-        const isOwn = bubble.classList.contains("is-out");
-        return Array.from(
-          bubble.querySelectorAll(
-            ".message.spoilers-container:not(.call-message):not(.document-message)"
-          )
-        ).map((contentWrapper) => {
-          return { contentWrapper, isOwn };
-        });
-      })
-      .slice(-10);
-
+    const bubblesWithTextWrappers = flatBubbles.flatMap((bubble) => {
+      const isOwn = bubble.classList.contains("is-out");
+      return Array.from(
+        bubble.querySelectorAll(
+          ".message.spoilers-container:not(.call-message):not(.document-message)"
+        )
+      ).map((contentWrapper) => {
+        return { contentWrapper, isOwn };
+      });
+    });
     const newContextMessages = bubblesWithTextWrappers.map(
       ({ contentWrapper, isOwn }) => {
         const content =
@@ -149,7 +146,6 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     const chatObserver = new MutationObserver(() => {
       if (!companion) return;
       handleUpdateContextMessages();
-      chatObserver.disconnect();
     });
     chatObserver.observe(document.querySelector(".bubbles")!, {
       childList: true,

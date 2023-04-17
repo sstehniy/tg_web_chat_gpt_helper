@@ -6,7 +6,11 @@ export const KeySetup = () => {
   const [inputToken, setInputToken] = useState("");
   const [showInputError, setShowInputError] = useState(false);
   return (
-    <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
+    <form
+      autoComplete="off"
+      onSubmit={(e) => e.preventDefault()}
+      className="mt-2"
+    >
       <div className="form-control">
         <label className="label">
           <span className="label-text">
@@ -28,7 +32,7 @@ export const KeySetup = () => {
             style={{
               backgroundColor: "var(--input-search-background-color)"
             }}
-            className="input input-sm input-bordered rounded-lg w-full bg-base shadow-md"
+            className="input input-sm input-bordered rounded-lg w-full  shadow-md"
           />
           <button
             className="btn btn-sm"
