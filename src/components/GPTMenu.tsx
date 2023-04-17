@@ -1,14 +1,20 @@
 import { forwardRef, useEffect, useState } from "react";
 import { useGptApi } from "../context/gptApi";
 import { KeySetup } from "./KeySetup";
-import { PropmtForm } from "./PromptForm";
+import { ReplyForm } from "./ReplyForm";
+import { BiChat } from "react-icons/bi";
+import { ChatForm } from "./ChatForm";
+import { MdQuickreply } from "react-icons/md";
 
 export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
   const { isAuthorized } = useGptApi();
   const [menuBottomProp, setMenuBottomProp] = useState(0);
+  const [activeTab, setActiveTab] = useState<"smart_reply" | "chat">(
+    "smart_reply"
+  );
 
   useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
+    const observer = new MutationObserver(() => {
       const inputHeight = document
         .querySelector(".chat-input-container")
         ?.getBoundingClientRect().height;
@@ -28,7 +34,7 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
 
   return (
     <ul
-      className={`text text-lg !ps-4 p-4 rounded-2xl w-2/3 min-w-fit absolute  right-0 shadow-xl`}
+      className="text text-lg !ps-4 p-4 rounded-2xl absolute  right-0 shadow-xl"
       style={{
         backgroundColor: "var(--surface-color)",
         color: "var(--primary-text-color)",
@@ -37,7 +43,45 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
       ref={ref}
     >
       <h3 className="m-0">ChatGPT Telegram Assistant</h3>
-      {!isAuthorized ? <KeySetup /> : <PropmtForm />}
+      {isAuthorized && (
+        <div className="btn-group absolute top-4 right-4">
+          <button
+            className="btn btn-sm rounded-sm"
+            onClick={() => setActiveTab("smart_reply")}
+            style={{
+              fontSize: "1.3rem",
+              color: "white",
+              backgroundColor:
+                activeTab === "smart_reply"
+                  ? "var(--primary-color)"
+                  : "var(--secondary-color)"
+            }}
+          >
+            <MdQuickreply />
+          </button>
+          <button
+            className="btn btn-sm rounded-sm"
+            onClick={() => setActiveTab("chat")}
+            style={{
+              fontSize: "1.3rem",
+              color: "white",
+              backgroundColor:
+                activeTab === "chat"
+                  ? "var(--primary-color)"
+                  : "var(--secondary-color)"
+            }}
+          >
+            <BiChat />
+          </button>
+        </div>
+      )}
+      {!isAuthorized ? (
+        <KeySetup />
+      ) : activeTab === "smart_reply" ? (
+        <ReplyForm />
+      ) : (
+        <ChatForm />
+      )}
     </ul>
   );
 });
