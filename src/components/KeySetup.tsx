@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useGptApi } from "../context/gptApi";
+import { useOpenaiClient } from "../context/openaiClient";
 
 export const KeySetup = () => {
-  const { handleSetToken } = useGptApi();
+  const { handleSetToken } = useOpenaiClient();
   const [inputToken, setInputToken] = useState("");
   const [showInputError, setShowInputError] = useState(false);
   return (

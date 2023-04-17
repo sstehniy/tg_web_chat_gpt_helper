@@ -1,20 +1,19 @@
 import { useMemo, useState } from "react";
-import { useGptApi } from "../context/gptApi";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import { FaPlay } from "react-icons/fa";
 import { MdContentCopy, MdOutlineInput } from "react-icons/md";
+import { useChat } from "../hooks/useChat";
 
 export const ChatForm = () => {
-  const { composeFormMessages, handleSendComposeMessage, setChatFormMessages } =
-    useGptApi();
   const [inputMessage, setInputMessage] = useState("");
   const [hoveredId, setHoveredId] = useState<string>("");
+  const { error, generate, loading, messages } = useChat();
   const messageGroups = useMemo(() => {
     const groups: {
       role: ChatCompletionRequestMessageRoleEnum;
       messages: string[];
     }[] = [];
-    composeFormMessages.forEach((message) => {
+    messages.forEach((message) => {
       const lastGroup = groups[groups.length - 1];
       if (lastGroup && lastGroup.role === message.role) {
         lastGroup.messages.push(message.content);
@@ -26,7 +25,7 @@ export const ChatForm = () => {
       }
     });
     return groups;
-  }, [composeFormMessages]);
+  }, [messages]);
   return (
     <div className="w-96">
       <div
@@ -56,16 +55,16 @@ export const ChatForm = () => {
             }`}
           >
             {group.messages.map((message, m_idx) => (
-              <div className="relative">
+              <div className="relative" style={{ maxWidth: "70%" }}>
                 <div
                   key={message + g_idx + m_idx}
-                  className="px-3 py-1.5 text-sm rounded-md relative"
+                  className="px-3 py-1.5 text-sm rounded-md shadow-sm"
                   onMouseEnter={() => setHoveredId(message + g_idx + m_idx)}
                   onMouseLeave={() => setHoveredId("")}
                   style={{
-                    maxWidth: "70%",
-                    backgroundColor: "var(--primary-color)",
-                    minWidth: 45
+                    backgroundColor:
+                      "var(--light-filled-message-out-primary-color)",
+                    minWidth: 60
                   }}
                 >
                   {group.role ===
@@ -74,9 +73,8 @@ export const ChatForm = () => {
                     <div
                       className="absolute flex gap-1"
                       style={{
-                        right: "-30%",
-                        top: "-30%",
-                        transform: "translate(-50%)"
+                        top: -20,
+                        right: -40
                       }}
                     >
                       <button
@@ -121,7 +119,9 @@ export const ChatForm = () => {
                       </button>
                     </div>
                   ) : null}
-                  {message}
+                  <span style={{ color: "var(--primary-text-color))" }}>
+                    {message}
+                  </span>
                 </div>
               </div>
             ))}
@@ -147,15 +147,7 @@ export const ChatForm = () => {
           style={{ backgroundColor: "var(--primary-color)", color: "white" }}
           disabled={!inputMessage}
           onClick={() => {
-            const newMessages = [
-              ...composeFormMessages,
-              {
-                role: ChatCompletionRequestMessageRoleEnum.User,
-                content: inputMessage
-              }
-            ];
-            setChatFormMessages(newMessages);
-            handleSendComposeMessage(newMessages);
+            generate(inputMessage);
             setInputMessage("");
           }}
         >

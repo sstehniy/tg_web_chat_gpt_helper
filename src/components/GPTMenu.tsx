@@ -5,9 +5,10 @@ import { ReplyForm } from "./ReplyForm";
 import { BiChat } from "react-icons/bi";
 import { ChatForm } from "./ChatForm";
 import { MdQuickreply } from "react-icons/md";
+import { useOpenaiClient } from "../context/openaiClient";
 
 export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
-  const { isAuthorized } = useGptApi();
+  const { isAuthorized } = useOpenaiClient();
   const [menuBottomProp, setMenuBottomProp] = useState(0);
   const [activeTab, setActiveTab] = useState<"smart_reply" | "chat">(
     "smart_reply"
@@ -77,10 +78,17 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
       )}
       {!isAuthorized ? (
         <KeySetup />
-      ) : activeTab === "smart_reply" ? (
-        <ReplyForm />
       ) : (
-        <ChatForm />
+        <>
+          <div
+            style={{ display: activeTab === "smart_reply" ? "block" : "none" }}
+          >
+            <ReplyForm />
+          </div>
+          <div style={{ display: activeTab === "chat" ? "block" : "none" }}>
+            <ChatForm />
+          </div>
+        </>
       )}
     </ul>
   );
