@@ -28,7 +28,10 @@ export function useChatCompelition() {
         console.log(response);
         const responseText = response.data.choices[0].message?.content;
         if (responseText) {
-          setMessages((prev) => [...prev, responseText]);
+          setMessages((prev) => [
+            ...prev,
+            responseText.replace("ME:", "").replace("Other:", "").trim()
+          ]);
         }
       } catch (e) {
         console.log(e);

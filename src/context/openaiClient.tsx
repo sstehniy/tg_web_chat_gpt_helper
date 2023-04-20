@@ -12,9 +12,9 @@ import {
 
 export const baseApiOptions = {
   model: "gpt-3.5-turbo",
-  top_p: 0.8,
-  temperature: 0.7,
-  max_tokens: 150
+  top_p: 0.7,
+  temperature: 0.5,
+  max_tokens: 250
 };
 
 type OpenaiClientContextType = {

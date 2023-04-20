@@ -66,7 +66,7 @@ I will provide you with a chat messages between two people: ME and OTHER. Each m
 or
 > OTHER: MESSAGE
 
-The last message starts with SELECTED. This message is present in the chat log. Your task is using the context of the messages that start with ME or OTHER to create a short sensible reply message to the message marked with SELECTED, as if you were chatting with this person. Omit the "ME:" in the ouput!
+The last message starts with SELECTED. This message is present in the chat log. Your task is using the context of the messages that start with ME or OTHER to create a short sensible reply message to the message marked with SELECTED, as if you were chatting with this person. Output only the message content without the "ME:" prefix!
 
 Additional info to take into account:
 - Output writing style: conversational
@@ -81,7 +81,7 @@ I will provide you with a chat messages between two people: ME and OTHER. Each m
 or
 > OTHER: MESSAGE
   
-The last message starts with SELECTED. This message is present in the chat log. Your task is using the context of the messages that start with ME or OTHER to create a short sensible reply message to the message marked with SELECTED, as if you were chatting with this person. Omit the "ME:" in the ouput!
+The last message starts with SELECTED. This message is present in the chat log. Your task is using the context of the messages that start with ME or OTHER to create a short sensible reply message to the message marked with SELECTED, as if you were chatting with this person. Output only the message content without the "ME:" prefix!
   
 Additional info to take into account:
  - Output writing style: {{OUTPUT_WRITING_STYLE}}

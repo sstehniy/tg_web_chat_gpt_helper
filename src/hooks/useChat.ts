@@ -23,7 +23,13 @@ export function useChat() {
         if (responseText) {
           setMessages((prev) => [
             ...prev,
-            { role: "assistant", content: responseText }
+            {
+              role: "assistant",
+              content: responseText
+                .replace("ME:", "")
+                .replace("Other:", "")
+                .trim()
+            }
           ]);
         }
       } catch (e) {
