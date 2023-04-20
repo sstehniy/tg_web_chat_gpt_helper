@@ -60,49 +60,34 @@ Output type: REPLY
 // file contains the prompts preset for completion
 export const prompts: Record<PromptType, string> = {
   SMART_PROMPT: `
-  i will give you a log of chat messages between two people: ME and OTHER. each log looks like this:
+I will provide you with a chat messages between two people: ME and OTHER. Each message looks like this:
 
-  > [ME|OTHER]: [MESSAGE]
-  
-  These messages should be used as the conversation context.  The last message is marked as SELECTED. Such a message looks like this:
-  
-  > SELETED: [MESSAGE]
+> ME: MESSAGE
+or
+> OTHER: MESSAGE
 
-  
-If the output type is REPLY, your task is to create a reply to the message marked as SELECTED. You must analyze the logs and when it makes sense to you, use the context to create the reply, otherwise do not use the log for generating the reply to the last message. Return only the output message without log foramtting. After the logs there will be given a list of additional infos to take in account when creating the output.
+The last message starts with SELECTED. This message is present in the chat log. Your task is using the context of the messages that start with ME or OTHER to create a short sensible reply message to the message marked with SELECTED, as if you were chatting with this person. Omit the "ME:" in the ouput!
 
-  
-  LOG: 
-  {{LOGS}}
-
-  Additional info to take into account:
-   - Output type should be: {{OUTPUT_TYPE}}
-   - Output language: The language of the last log message
-  
-  Only return the message i will use in the chat, please! Without Output type at the end! `,
+Additional info to take into account:
+- Output writing style: conversational
+- Output tone: neutral
+- Output length: maximum 30 words
+- Output language: The language of the last message
+`,
   CUSTOM_PROMPT: `
-  i will give you a log of chat messages between two people: ME and OTHER. each log looks like this:
+I will provide you with a chat messages between two people: ME and OTHER. Each message looks like this:
 
-  > [ME|OTHER]: [MESSAGE]
+> ME: MESSAGE
+or
+> OTHER: MESSAGE
   
-  These messages should be used as the conversation context.  The last message is marked as SELECTED. Such a message looks like this:
+The last message starts with SELECTED. This message is present in the chat log. Your task is using the context of the messages that start with ME or OTHER to create a short sensible reply message to the message marked with SELECTED, as if you were chatting with this person. Omit the "ME:" in the ouput!
   
-  > SELETED: [MESSAGE]
-
-  
-If the output type is REPLY, your task is to create a reply to the message marked as SELECTED. You must analyze the logs and when it makes sense to you, use the context to create the reply, otherwise do not use the log for generating the reply to the last message. Return only the output message without log foramtting. After the logs there will be given a list of additional infos to take in account when creating the output.
-
-  
-  LOG: 
-  {{LOGS}}
-  {{SELECTED_MESSAGE}}
-  
-  Additional info to take into account:
-   - Output type should be: {{OUTPUT_TYPE}}
-   - Output writing style: {{OUTPUT_WRITING_STYLE}}
-   - Output tone: {{OUTPUT_TONE}}
-   - Additional prompt to take into account: {{CUSTOM_PROMPT}}
-   - Output language: {{OUTPUT_LANGUAGE}}
-   
-  Only return the message i will use in the chat, please! Without Output type at the end!`
+Additional info to take into account:
+ - Output writing style: {{OUTPUT_WRITING_STYLE}}
+ - Output tone: {{OUTPUT_TONE}}
+ - Output length: maximum 30 words
+ - Additional prompt to take into account: {{CUSTOM_PROMPT}}
+ - Output language: {{OUTPUT_LANGUAGE}}
+`
 };

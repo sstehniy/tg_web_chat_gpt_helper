@@ -1,5 +1,4 @@
 import { forwardRef, useEffect, useState } from "react";
-import { useGptApi } from "../context/gptApi";
 import { KeySetup } from "./KeySetup";
 import { ReplyForm } from "./ReplyForm";
 import { BiChat } from "react-icons/bi";

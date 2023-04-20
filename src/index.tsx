@@ -1,5 +1,4 @@
 import { createRoot } from "react-dom/client";
-import { GptApiProvider } from "./context/gptApi";
 import { Root } from "./Root";
 import "./style.css";
 import { ChatObserverProvider } from "./context/chatObserver";

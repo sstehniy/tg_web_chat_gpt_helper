@@ -12,8 +12,8 @@ import {
 
 export const baseApiOptions = {
   model: "gpt-3.5-turbo",
-  top_p: 0.6,
-  temperature: 0.75,
+  top_p: 0.8,
+  temperature: 0.7,
   max_tokens: 150
 };
 
@@ -61,7 +61,6 @@ export const OpenaiClientProvider: FC<PropsWithChildren<unknown>> = ({
       try {
         const models = await client.current.listModels();
         setIsAuthorized(true);
-        console.log(models);
       } catch (e) {
         console.error(e);
       }

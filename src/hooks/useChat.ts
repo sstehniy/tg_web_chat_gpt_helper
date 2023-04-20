@@ -19,7 +19,6 @@ export function useChat() {
           ...baseApiOptions,
           messages
         });
-
         const responseText = response.data.choices[0].message?.content;
         if (responseText) {
           setMessages((prev) => [
@@ -28,7 +27,7 @@ export function useChat() {
           ]);
         }
       } catch (e) {
-        console.log(e);
+        setError(e as any);
       } finally {
         setLoading(false);
       }
@@ -38,6 +37,7 @@ export function useChat() {
 
   const generate = useCallback(
     async (newInput: string) => {
+      setError(null);
       const newMessages = [
         ...messages,
         { role: ChatCompletionRequestMessageRoleEnum.User, content: newInput }

@@ -13,7 +13,15 @@ const consturctSmartPrompt = (
   targetMessage: ContextMessage,
   contextMessages: ContextMessage[]
 ): ChatCompletionRequestMessage[] => {
-  const logs = contextMessages.map((message) => {
+  const cutMessages = [];
+  for (const message of contextMessages) {
+    cutMessages.push(message);
+    if (message.content === targetMessage.content) {
+      break;
+    }
+  }
+
+  const logs = cutMessages.map((message) => {
     return `> ${message.isOwn ? "ME" : "OTHER"}: ${message.content}`;
   });
   const logsMessages: ChatCompletionRequestMessage[] = logs.map((log) => ({
@@ -65,8 +73,23 @@ export const SmartReplySection = () => {
         }}
         className="input input-bordered rounded-lg w-full  shadow-sm"
       />
-
-      {messages.length === 0 ? (
+      {error && (
+        <p className="text-error">
+          An error occured while generating the smart reply. Please try again
+        </p>
+      )}
+      {loading ? (
+        <button
+          className="btn w-full gap-2 mt-3"
+          style={{
+            backgroundColor: "var(--primary-color)",
+            color: "white"
+          }}
+          disabled={!selectedMessage || loading}
+        >
+          Loading...
+        </button>
+      ) : messages.length === 0 ? (
         <button
           className="btn glass w-full gap-2 mt-3"
           style={{
@@ -164,7 +187,7 @@ export const SmartReplySection = () => {
             </div>
             <textarea
               rows={2}
-              className="ps-24 textarea textarea-bordered w-full pe-11"
+              className="ps-24 textarea textarea-bordered w-full pe-14"
               value={messages[selectedsmartReplyIdx]}
               style={{
                 backgroundColor: "var(--input-search-background-color)",

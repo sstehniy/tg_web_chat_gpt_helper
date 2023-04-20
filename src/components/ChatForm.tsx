@@ -142,17 +142,31 @@ export const ChatForm = () => {
           }}
           className="input input-bordered rounded-lg w-full shadow-sm"
         />
-        <button
-          className="btn btn-square btn-outline"
-          style={{ backgroundColor: "var(--primary-color)", color: "white" }}
-          disabled={!inputMessage}
-          onClick={() => {
-            generate(inputMessage);
-            setInputMessage("");
-          }}
-        >
-          <FaPlay style={{ fontSize: "1.2rem" }} />
-        </button>
+        {loading ? (
+          <button
+            className="btn btn-square btn-outline"
+            style={{ backgroundColor: "var(--primary-color)", color: "white" }}
+            disabled={!inputMessage}
+            onClick={() => {
+              generate(inputMessage);
+              setInputMessage("");
+            }}
+          >
+            ...
+          </button>
+        ) : (
+          <button
+            className="btn btn-square btn-outline"
+            style={{ backgroundColor: "var(--primary-color)", color: "white" }}
+            disabled={!inputMessage}
+            onClick={() => {
+              generate(inputMessage);
+              setInputMessage("");
+            }}
+          >
+            <FaPlay style={{ fontSize: "1.2rem" }} />
+          </button>
+        )}
       </div>
     </div>
   );

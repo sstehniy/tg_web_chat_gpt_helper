@@ -31,6 +31,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     null
   );
   const [companion, setCompanion] = useState<string | null>(null);
+
   useEffect(() => {
     const handleOnMessage = (message: any) => {
       if (message.url !== updatedUrl) {
@@ -73,6 +74,10 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
 
     setContextMessages(newContextMessages.filter((message) => message.content));
   }, []);
+
+  useEffect(() => {
+    console.log("contextMessages", contextMessages);
+  }, [contextMessages]);
 
   useEffect(() => {
     const titleObserver = new MutationObserver(() => {
@@ -125,7 +130,6 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
           !selectedMessage ||
           selectedMessage.content !== newSelectedMessage.content
         ) {
-          console.log(selectedMessage?.content, newSelectedMessage.content);
           setSelectedMessage(newSelectedMessage);
         }
       }
@@ -162,14 +166,6 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     )! as HTMLButtonElement;
     goDownButton.click();
   }, [companion, updatedUrl]);
-
-  useEffect(() => {
-    console.log(selectedMessage);
-  }, [selectedMessage]);
-
-  useEffect(() => {
-    console.log(contextMessages);
-  }, [contextMessages]);
 
   return (
     <ChatObserverContext.Provider

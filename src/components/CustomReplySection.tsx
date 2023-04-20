@@ -11,6 +11,7 @@ import { prompts } from "../propmpts_config";
 import { ContextMessage } from "../types";
 import { useChatCompelition } from "../hooks/useChatCompelition";
 import { useChatObserver } from "../context/chatObserver";
+import { HiOutlineRefresh } from "react-icons/hi";
 
 const consturctCustomPrompt = (
   targetMessage: ContextMessage,
@@ -20,8 +21,15 @@ const consturctCustomPrompt = (
   customTone: string,
   customStyle: string
 ): ChatCompletionRequestMessage[] => {
-  const logs = contextMessages.map((message) => {
-    return `> ${message.isOwn ? "ME" : "OTHER"}: ${message.content}\n`;
+  const cutMessages = [];
+  for (const message of contextMessages) {
+    cutMessages.push(message);
+    if (message.content === targetMessage.content) {
+      break;
+    }
+  }
+  const logs = cutMessages.map((message) => {
+    return `> ${message.isOwn ? "ME" : "OTHER"}: ${message.content}`;
   });
   const logsMessages: ChatCompletionRequestMessage[] = logs.map((log) => ({
     content: log,
@@ -87,7 +95,8 @@ export const CustomReplySection = () => {
               ? "Please enter a custom prompt"
               : "Please select a message to reply to"
           }
-          readOnly={!selectedMessage}
+          disabled={!selectedMessage || loading}
+          readOnly={!selectedMessage || loading}
           style={{
             backgroundColor: "var(--input-search-background-color)",
             filter: selectedMessage ? "none" : "opacity(0.75)",
@@ -96,27 +105,63 @@ export const CustomReplySection = () => {
           }}
           className="input input-bordered rounded-lg w-full  shadow-sm"
         />
-        <button
-          className="btn btn-square btn-outline"
-          style={{ backgroundColor: "var(--primary-color)", color: "white" }}
-          disabled={!selectedMessage}
-          onClick={() => {
-            if (!selectedMessage) return;
-            handleUpdateContextMessages();
-            generate(
-              consturctCustomPrompt(
-                selectedMessage,
-                contextMessages,
-                customPrompt,
-                customLanguage,
-                customTone,
-                customStyle
-              )
-            );
-          }}
-        >
-          <FaPlay style={{ fontSize: "1.2rem" }} />
-        </button>
+        {loading ? (
+          <button
+            className="btn btn-square btn-outline"
+            style={{ backgroundColor: "var(--primary-color)", color: "white" }}
+            disabled={!selectedMessage || loading}
+          >
+            ...
+          </button>
+        ) : messages.length ? (
+          <button
+            className="btn btn-square btn-outline"
+            style={{ backgroundColor: "var(--primary-color)", color: "white" }}
+            disabled={!selectedMessage}
+            onClick={() => {
+              if (!selectedMessage) return;
+              handleUpdateContextMessages();
+              generate(
+                consturctCustomPrompt(
+                  selectedMessage,
+                  contextMessages,
+                  customPrompt,
+                  customLanguage,
+                  customTone,
+                  customStyle
+                )
+              );
+            }}
+          >
+            <HiOutlineRefresh
+              height={24}
+              width={24}
+              style={{ fontSize: "1.2rem" }}
+            />
+          </button>
+        ) : (
+          <button
+            className="btn btn-square btn-outline"
+            style={{ backgroundColor: "var(--primary-color)", color: "white" }}
+            disabled={!selectedMessage}
+            onClick={() => {
+              if (!selectedMessage) return;
+              handleUpdateContextMessages();
+              generate(
+                consturctCustomPrompt(
+                  selectedMessage,
+                  contextMessages,
+                  customPrompt,
+                  customLanguage,
+                  customTone,
+                  customStyle
+                )
+              );
+            }}
+          >
+            <FaPlay style={{ fontSize: "1.2rem" }} />
+          </button>
+        )}
       </div>
       <div className="flex mt-3 gap-2 justify-between">
         <div>
@@ -269,7 +314,7 @@ export const CustomReplySection = () => {
             </div>
             <textarea
               rows={2}
-              className="ps-24 textarea textarea-bordered w-full pe-11"
+              className="ps-24 textarea textarea-bordered w-full pe-14"
               value={messages[selectedCustomReplyIdx]}
               style={{
                 backgroundColor: "var(--input-search-background-color)",

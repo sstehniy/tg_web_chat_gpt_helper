@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useGptApi } from "../context/gptApi";
 import { useOpenaiClient } from "../context/openaiClient";
 
 export const KeySetup = () => {

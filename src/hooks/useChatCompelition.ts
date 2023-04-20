@@ -17,7 +17,9 @@ export function useChatCompelition() {
 
   const generate = useCallback(
     async (messages: ChatCompletionRequestMessage[]) => {
+      setError(null);
       try {
+        console.log(messages);
         setLoading(true);
         const response = await client.createChatCompletion({
           ...baseApiOptions,
@@ -30,6 +32,7 @@ export function useChatCompelition() {
         }
       } catch (e) {
         console.log(e);
+        setError(e as any);
       } finally {
         setLoading(false);
       }
