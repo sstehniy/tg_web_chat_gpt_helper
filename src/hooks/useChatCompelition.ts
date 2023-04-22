@@ -26,12 +26,14 @@ export function useChatCompelition() {
           messages
         });
         console.log(response);
-        const responseText = response.data.choices[0].message?.content;
+        let responseText = response.data.choices[0].message?.content;
+        // check if responseText starts with the pattern something:
+        if (responseText?.match(/^[a-zA-Z]+:/)) {
+          // if so, remove the first part of the string
+          responseText = responseText.replace(/^[a-zA-Z]+:/, "").trim();
+        }
         if (responseText) {
-          setMessages((prev) => [
-            ...prev,
-            responseText.replace("ME:", "").replace("Other:", "").trim()
-          ]);
+          setMessages((prev) => [...prev, responseText as string]);
         }
       } catch (e) {
         console.log(e);
