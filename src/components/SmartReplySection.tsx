@@ -8,6 +8,7 @@ import { BsFillLightningChargeFill } from "react-icons/bs";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { MdContentCopy, MdOutlineInput } from "react-icons/md";
+import { ResponseSuggestions } from "./ResponseSuggestions";
 
 const consturctSmartPrompt = (
   targetMessage: ContextMessage,
@@ -22,14 +23,14 @@ const consturctSmartPrompt = (
   }
 
   const logs = cutMessages.map((message) => {
-    return `> ${message.isOwn ? "ME" : "OTHER"}: ${message.content}`;
+    return ` ${message.isOwn ? "ME" : "OTHER"}: ${message.content}`;
   });
   const logsMessages: ChatCompletionRequestMessage[] = logs.map((log) => ({
     content: log,
     role: "user"
   }));
   logsMessages.push({
-    content: `> SELECTED: ${targetMessage.content}`,
+    content: ` SELECTED: ${targetMessage.content}`,
     role: "user"
   });
   console.log([
@@ -140,104 +141,11 @@ export const SmartReplySection = () => {
               Generated suggestion
             </span>
           </label>
-          <div className="relative text-xs items-center">
-            <div className="absolute flex gap-0.5 top-3 left-2">
-              <button
-                className="btn-xs"
-                disabled={selectedsmartReplyIdx === 0}
-                onClick={() => {
-                  setSelectedSmartReplyIdx(
-                    Math.max(0, selectedsmartReplyIdx - 1)
-                  );
-                }}
-              >
-                <FaChevronLeft
-                  style={{
-                    fill: "var(--primary-text-color)",
-                    opacity: selectedsmartReplyIdx > 0 ? 1 : 0.2
-                  }}
-                />
-              </button>
-              <span
-                style={{
-                  lineHeight: "1.8",
-                  color: "var(--primary-text-color)",
-                  fontVariantNumeric: "tabular-nums"
-                }}
-              >
-                {selectedsmartReplyIdx + 1} / {messages.length}
-              </span>
-              <button
-                className="btn-xs"
-                disabled={selectedsmartReplyIdx === messages.length - 1}
-                onClick={() => {
-                  setSelectedSmartReplyIdx(
-                    Math.min(messages.length - 1, selectedsmartReplyIdx + 1)
-                  );
-                }}
-              >
-                <FaChevronRight
-                  style={{
-                    fill: "var(--primary-text-color)",
-                    opacity:
-                      selectedsmartReplyIdx === messages.length - 1 ? 0.2 : 1
-                  }}
-                />
-              </button>
-            </div>
-            <textarea
-              rows={2}
-              className="ps-24 textarea textarea-bordered w-full pe-14"
-              value={messages[selectedsmartReplyIdx]}
-              style={{
-                backgroundColor: "var(--input-search-background-color)",
-                textOverflow: "ellipsis",
-                color: "var(--secondary-text-color)",
-                resize: "none"
-              }}
-              readOnly
-            />
-            <div className="absolute top-2 right-2 flex gap-1.5">
-              <div className="tooltip" data-tip="Copy message">
-                <button
-                  className="btn-sm px-1"
-                  onClick={() => {
-                    navigator.clipboard.writeText(
-                      messages[selectedsmartReplyIdx]
-                    );
-                  }}
-                >
-                  <MdContentCopy
-                    style={{
-                      fill: "var(--primary-color)"
-                    }}
-                  />
-                </button>
-              </div>
-              <div className="tooltip" data-tip="Insert message">
-                <button
-                  className="btn-sm px-1"
-                  onClick={() => {
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    document.querySelector(
-                      ".input-message-input.i18n.scrollable.scrollable-y.no-scrollbar"
-                    )!.textContent = messages[selectedsmartReplyIdx];
-                    document
-                      .querySelector(
-                        ".input-message-input.i18n.scrollable.scrollable-y.no-scrollbar"
-                      )
-                      ?.dispatchEvent(new Event("input"));
-                  }}
-                >
-                  <MdOutlineInput
-                    style={{
-                      fill: "var(--primary-color)"
-                    }}
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
+          <ResponseSuggestions
+            selectedSuggestionIndex={selectedsmartReplyIdx}
+            setSelectedSuggestionIndex={setSelectedSmartReplyIdx}
+            suggestions={messages}
+          />
         </div>
       )}
     </div>
