@@ -42,14 +42,12 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
       }}
       ref={ref}
     >
-      <h3 className="m-0">ChatGPT Telegram Assistant</h3>
       {isAuthorized && (
-        <div className="btn-group absolute top-4 right-4">
+        <div className="btn-group flex w-full justify-stretch mb-3">
           <button
-            className="btn btn-sm rounded-sm"
+            className="btn btn-sm flex-1 gap-2"
             onClick={() => setActiveTab("smart_reply")}
             style={{
-              fontSize: "1.3rem",
               color: "white",
               backgroundColor:
                 activeTab === "smart_reply"
@@ -57,13 +55,13 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
                   : "var(--secondary-color)"
             }}
           >
-            <MdQuickreply />
+            <MdQuickreply style={{ fontSize: "1.3rem" }} />
+            Reply
           </button>
           <button
-            className="btn btn-sm rounded-sm"
+            className="btn btn-sm flex-1 gap-2"
             onClick={() => setActiveTab("chat")}
             style={{
-              fontSize: "1.3rem",
               color: "white",
               backgroundColor:
                 activeTab === "chat"
@@ -71,7 +69,8 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
                   : "var(--secondary-color)"
             }}
           >
-            <BiChat />
+            <BiChat style={{ fontSize: "1.3rem" }} />
+            Chat
           </button>
         </div>
       )}
