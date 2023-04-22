@@ -155,18 +155,6 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     });
   }, [handleUpdateContextMessages, updatedUrl, companion]);
 
-  useEffect(() => {
-    if (!companion) return;
-    if (document.querySelector(".chat-input.is-hidden")) {
-      return;
-    }
-
-    const goDownButton = document.querySelector(
-      ".btn-circle.btn-corner.z-depth-1.bubbles-corner-button.chat-secondary-button.bubbles-go-down.tgico-arrow_down.rp"
-    )! as HTMLButtonElement;
-    goDownButton.click();
-  }, [companion, updatedUrl]);
-
   return (
     <ChatObserverContext.Provider
       value={{
