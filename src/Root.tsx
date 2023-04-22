@@ -1,5 +1,4 @@
 import { ReactComponent as Logo } from "./assets/chat_gpt_logo.svg";
-import "./gpt-menu.css";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { GptMenu } from "./components/GptMenu";
