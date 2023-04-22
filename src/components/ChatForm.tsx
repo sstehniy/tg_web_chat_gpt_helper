@@ -27,9 +27,9 @@ export const ChatForm = () => {
     return groups;
   }, [messages]);
   return (
-    <div className="w-96">
+    <div className="w-80">
       <div
-        className={`w-full rounded-lg mt-5 p-2 overflow-y-auto shadow-inner ${
+        className={`w-full rounded-lg mt-5 p-2 overflow-y-auto ${
           !messageGroups.length
             ? "flex flex-col justify-center items-center"
             : ""
@@ -37,7 +37,8 @@ export const ChatForm = () => {
         style={{
           backgroundColor: "var(--input-search-background-color)",
           minHeight: "250px",
-          maxHeight: "450px"
+          border: "1px solid hsl(220 13.376% 69.216% / 0.2)",
+          maxHeight: "350px"
         }}
       >
         {!messageGroups.length && (
@@ -64,7 +65,7 @@ export const ChatForm = () => {
                   style={{
                     backgroundColor:
                       "var(--light-filled-message-out-primary-color)",
-                    minWidth: 60
+                    minWidth: 40
                   }}
                 >
                   {group.role ===
@@ -127,6 +128,33 @@ export const ChatForm = () => {
             ))}
           </div>
         ))}
+        {loading && (
+          <div
+            className="px-3 py-1.5 text-sm rounded-md shadow-sm w-9"
+            style={{
+              backgroundColor: "var(--light-filled-message-out-primary-color)"
+            }}
+          >
+            <span
+              className="loading-dot"
+              style={{ color: "var(--primary-text-color))" }}
+            >
+              .
+            </span>
+            <span
+              className="loading-dot"
+              style={{ color: "var(--primary-text-color))" }}
+            >
+              .
+            </span>
+            <span
+              className="loading-dot"
+              style={{ color: "var(--primary-text-color))" }}
+            >
+              .
+            </span>
+          </div>
+        )}
       </div>
       <div className="flex gap-2 mt-3">
         <input
@@ -134,6 +162,13 @@ export const ChatForm = () => {
           id="chat_prompt"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              generate(inputMessage);
+              setInputMessage("");
+            }
+          }}
           placeholder={"Please enter a message"}
           style={{
             resize: "none",
