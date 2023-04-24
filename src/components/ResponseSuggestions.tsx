@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { MdContentCopy, MdOutlineInput } from "react-icons/md";
+import { useTheme } from "../context/themeProvider";
 
 type ResponseSuggestionsProps = {
   selectedSuggestionIndex: number;
@@ -13,21 +14,22 @@ export const ResponseSuggestions: FC<ResponseSuggestionsProps> = ({
   setSelectedSuggestionIndex,
   suggestions
 }) => {
+  const theme = useTheme();
   return (
     <div className="relative text-xs items-center">
       <div className="absolute flex gap-0.5 top-3 left-0">
         <button
-          className="btn-xs -me-1"
-          disabled={selectedSuggestionIndex === 0}
+          className={`btn-xs -me-1`}
           onClick={() => {
             setSelectedSuggestionIndex(
               Math.max(0, selectedSuggestionIndex - 1)
             );
           }}
+          disabled={selectedSuggestionIndex === 0}
         >
           <FaChevronLeft
             style={{
-              fill: "var(--primary-text-color)",
+              fill: theme.vars.primaryTextColor,
               opacity: selectedSuggestionIndex > 0 ? 1 : 0.2
             }}
           />
@@ -35,24 +37,24 @@ export const ResponseSuggestions: FC<ResponseSuggestionsProps> = ({
         <span
           style={{
             lineHeight: "1.8",
-            color: "var(--primary-text-color)",
+            color: theme.vars.primaryTextColor,
             fontVariantNumeric: "tabular-nums"
           }}
         >
           {selectedSuggestionIndex + 1} / {suggestions.length}
         </span>
         <button
-          className="btn-xs -ms-1"
-          disabled={selectedSuggestionIndex === suggestions.length - 1}
+          className={`btn-xs -ms-1`}
           onClick={() => {
             setSelectedSuggestionIndex(
               Math.min(suggestions.length - 1, selectedSuggestionIndex + 1)
             );
           }}
+          disabled={selectedSuggestionIndex === suggestions.length - 1}
         >
           <FaChevronRight
             style={{
-              fill: "var(--primary-text-color)",
+              fill: theme.vars.primaryTextColor,
               opacity:
                 selectedSuggestionIndex === suggestions.length - 1 ? 0.2 : 1
             }}
@@ -64,9 +66,9 @@ export const ResponseSuggestions: FC<ResponseSuggestionsProps> = ({
         className="ps-20 textarea textarea-bordered w-full pe-14 h-14"
         value={suggestions[selectedSuggestionIndex]}
         style={{
-          backgroundColor: "var(--input-search-background-color)",
+          backgroundColor: theme.vars.inputSearchBackgroundColor,
           textOverflow: "ellipsis",
-          color: "var(--secondary-text-color)",
+          color: theme.vars.secondaryTextColor,
           resize: "none"
         }}
         readOnly
@@ -83,7 +85,7 @@ export const ResponseSuggestions: FC<ResponseSuggestionsProps> = ({
           >
             <MdContentCopy
               style={{
-                fill: "var(--primary-color)"
+                fill: theme.vars.primary
               }}
             />
           </button>
@@ -93,19 +95,19 @@ export const ResponseSuggestions: FC<ResponseSuggestionsProps> = ({
             className="btn-sm px-1"
             onClick={() => {
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              document.querySelector(
-                ".input-message-input.i18n.scrollable.scrollable-y.no-scrollbar"
-              )!.textContent = suggestions[selectedSuggestionIndex];
+              document.querySelector(theme.selectors.chatInput)!.textContent =
+                suggestions[selectedSuggestionIndex];
               document
-                .querySelector(
-                  ".input-message-input.i18n.scrollable.scrollable-y.no-scrollbar"
-                )
+                .querySelector(theme.selectors.chatInput)
                 ?.dispatchEvent(new Event("input"));
+              document
+                .querySelector(theme.selectors.chatInput)
+                ?.dispatchEvent(new Event("change"));
             }}
           >
             <MdOutlineInput
               style={{
-                fill: "var(--primary-color)"
+                fill: theme.vars.primary
               }}
             />
           </button>

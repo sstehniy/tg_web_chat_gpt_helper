@@ -9,6 +9,7 @@ import { HiOutlineRefresh } from "react-icons/hi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { MdContentCopy, MdOutlineInput } from "react-icons/md";
 import { ResponseSuggestions } from "./ResponseSuggestions";
+import { useTheme } from "../context/themeProvider";
 
 const consturctSmartPrompt = (
   targetMessage: ContextMessage,
@@ -33,10 +34,7 @@ const consturctSmartPrompt = (
     content: ` SELECTED: ${targetMessage.content}`,
     role: "user"
   });
-  console.log([
-    { content: prompts.SMART_PROMPT, role: "user" },
-    ...logsMessages
-  ]);
+
   return [{ content: prompts.SMART_PROMPT, role: "user" }, ...logsMessages];
 };
 
@@ -44,6 +42,7 @@ export const SmartReplySection = () => {
   const [selectedsmartReplyIdx, setSelectedSmartReplyIdx] = useState<number>(0);
   const { messages, error, generate, loading } = useChatCompelition();
   const { selectedMessage, contextMessages } = useChatObserver();
+  const theme = useTheme();
   useEffect(() => {
     if (messages.length > 0) {
       setSelectedSmartReplyIdx(messages.length - 1);
@@ -51,9 +50,9 @@ export const SmartReplySection = () => {
   }, [messages]);
   return (
     <div>
-      <label className="label" htmlFor="selected_message">
+      <label className="label mb-0 mb-0" htmlFor="selected_message">
         <span
-          style={{ color: "var(--secondary-text-color)" }}
+          style={{ color: theme.vars.secondaryTextColor }}
           className="label-text"
         >
           Selected Message
@@ -67,10 +66,10 @@ export const SmartReplySection = () => {
         readOnly
         placeholder="Please select a message to reply to"
         style={{
-          backgroundColor: "var(--input-search-background-color)",
+          backgroundColor: theme.vars.inputSearchBackgroundColor,
           filter: selectedMessage ? "none" : "opacity(0.75)",
           textOverflow: "ellipsis",
-          color: "var(--secondary-text-color)"
+          color: theme.vars.secondaryTextColor
         }}
         className="input input-bordered rounded-lg w-full  shadow-sm"
       />
@@ -81,9 +80,9 @@ export const SmartReplySection = () => {
       )}
       {loading ? (
         <button
-          className="btn w-full gap-2 mt-3"
+          className={`btn w-full gap-2 mt-3`}
           style={{
-            backgroundColor: "var(--primary-color)",
+            backgroundColor: theme.vars.primary,
             color: "white"
           }}
           disabled={!selectedMessage || loading}
@@ -92,16 +91,16 @@ export const SmartReplySection = () => {
         </button>
       ) : messages.length === 0 ? (
         <button
-          className="btn glass w-full gap-2 mt-3"
+          className={`btn glass w-full gap-2 mt-3`}
           style={{
-            backgroundColor: "var(--primary-color)",
+            backgroundColor: theme.vars.primary,
             color: "white"
           }}
+          disabled={!selectedMessage}
           onClick={() => {
             if (!selectedMessage) return;
             generate(consturctSmartPrompt(selectedMessage, contextMessages));
           }}
-          disabled={!selectedMessage}
         >
           <BsFillLightningChargeFill
             height={24}
@@ -112,16 +111,16 @@ export const SmartReplySection = () => {
         </button>
       ) : (
         <button
-          className="btn glass w-full gap-2 mt-3"
+          className={`btn glass w-full gap-2 mt-3`}
           style={{
-            backgroundColor: "var(--primary-color)",
+            backgroundColor: theme.vars.primary,
             color: "white"
           }}
+          disabled={!selectedMessage}
           onClick={() => {
             if (!selectedMessage) return;
             generate(consturctSmartPrompt(selectedMessage, contextMessages));
           }}
-          disabled={!selectedMessage}
         >
           <HiOutlineRefresh
             height={24}
@@ -133,9 +132,9 @@ export const SmartReplySection = () => {
       )}
       {messages.length > 0 && (
         <div className="w-full mt-2">
-          <label className="label pb-1" htmlFor="smart_reply_output">
+          <label className="label mb-0 pb-1" htmlFor="smart_reply_output">
             <span
-              style={{ color: "var(--secondary-text-color)" }}
+              style={{ color: theme.vars.secondaryTextColor }}
               className="label-text"
             >
               Generated suggestion

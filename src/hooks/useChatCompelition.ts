@@ -19,13 +19,12 @@ export function useChatCompelition() {
     async (messages: ChatCompletionRequestMessage[]) => {
       setError(null);
       try {
-        console.log(messages);
         setLoading(true);
         const response = await client.createChatCompletion({
           ...baseApiOptions,
           messages
         });
-        console.log(response);
+
         let responseText = response.data.choices[0].message?.content;
         // check if responseText starts with the pattern something:
         if (responseText?.match(/^[a-zA-Z]+:/)) {
@@ -36,7 +35,6 @@ export function useChatCompelition() {
           setMessages((prev) => [...prev, responseText as string]);
         }
       } catch (e) {
-        console.log(e);
         setError(e as any);
       } finally {
         setLoading(false);

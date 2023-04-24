@@ -8,6 +8,7 @@ import {
   useState
 } from "react";
 import { ContextMessage, OutputMessageType } from "../types";
+import { useTheme } from "./themeProvider";
 
 type ChatObserverContextType = {
   contextMessages: ContextMessage[];
@@ -31,6 +32,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     null
   );
   const [companion, setCompanion] = useState<string | null>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const handleOnMessage = (message: any) => {
@@ -42,21 +44,14 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
   }, [updatedUrl]);
 
   const handleUpdateContextMessages = useCallback(() => {
-    const latestBubbles = Array.from(
-      document.querySelectorAll(".bubbles-group")
+    const flatBubbles = Array.from(
+      document.querySelectorAll(theme.selectors.bubble)
     );
-    if (!latestBubbles.length) {
-      return;
-    }
-    const flatBubbles = latestBubbles.flatMap((bubblesGroup) => {
-      return Array.from(bubblesGroup.querySelectorAll(".bubble"));
-    });
+
     const bubblesWithTextWrappers = flatBubbles.flatMap((bubble) => {
-      const isOwn = bubble.classList.contains("is-out");
+      const isOwn = bubble.classList.contains(theme.classNames.isOut);
       return Array.from(
-        bubble.querySelectorAll(
-          ".message.spoilers-container:not(.call-message):not(.document-message)"
-        )
+        bubble.querySelectorAll(theme.selectors.bubblesWithTextWrappers)
       ).map((contentWrapper) => {
         return { contentWrapper, isOwn };
       });
@@ -73,17 +68,14 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     );
 
     setContextMessages(newContextMessages.filter((message) => message.content));
-  }, []);
-
-  useEffect(() => {
-    console.log("contextMessages", contextMessages);
-  }, [contextMessages]);
+  }, [theme]);
 
   useEffect(() => {
     const titleObserver = new MutationObserver(() => {
-      if (document.querySelector(".top .user-title")?.firstChild) {
+      if (document.querySelector(theme.selectors.userTitle)?.firstChild) {
         setCompanion(
-          document.querySelector(".top .user-title")!.firstChild!.textContent
+          document.querySelector(theme.selectors.userTitle)!.firstChild!
+            .textContent
         );
         titleObserver.disconnect();
       }
@@ -92,19 +84,19 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
       childList: true,
       subtree: true
     });
-  }, [updatedUrl]);
+  }, [updatedUrl, theme]);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const isHelperActive = document.querySelector(
-        ".chat.tabs-tab.active.is-helper-active"
+        theme.selectors.helperActive
       );
       if (!isHelperActive) {
         setSelectedMessage(null);
         return;
       } else {
         const replyToPeer = document.querySelector(
-          ".reply-wrapper .reply-title > .peer-title"
+          theme.selectors.replyToPeer
         )?.textContent;
         if (!replyToPeer) {
           return;
@@ -116,7 +108,7 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
             : OutputMessageType.COMPLEMENT
           : OutputMessageType.COMPLEMENT;
         const content = document.querySelector(
-          ".reply-wrapper .reply-subtitle"
+          theme.selectors.replyContent
         )?.textContent;
         if (!content) {
           return;
@@ -142,18 +134,18 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
     return () => {
       observer.disconnect();
     };
-  }, [companion, selectedMessage, updatedUrl]);
+  }, [companion, selectedMessage, updatedUrl, theme]);
 
   useEffect(() => {
     const chatObserver = new MutationObserver(() => {
       if (!companion) return;
       handleUpdateContextMessages();
     });
-    chatObserver.observe(document.querySelector(".bubbles-inner")!, {
+    chatObserver.observe(document.querySelector(theme.selectors.bubbles)!, {
       childList: true,
       subtree: true
     });
-  }, [handleUpdateContextMessages, updatedUrl, companion]);
+  }, [handleUpdateContextMessages, updatedUrl, companion, theme]);
 
   return (
     <ChatObserverContext.Provider

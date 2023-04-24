@@ -2,26 +2,27 @@ import { ReactComponent as Logo } from "./assets/chat_gpt_logo.svg";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { GptMenu } from "./components/GptMenu";
+import { useTheme } from "./context/themeProvider";
 
 export const Root = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef(null);
+  const theme = useTheme();
 
   return (
-    <div ref={wrapperRef} style={{ position: "static" }}>
-      <div
-        className={`btn-icon attach-file ${isMenuOpen ? "menu-open" : ""}`}
+    <>
+      <button
+        className={`btn-icon ${theme.classNames.attachFile} ${
+          isMenuOpen ? theme.classNames.menuOpen : ""
+        }`}
         onClick={() => setIsMenuOpen((prev) => !prev)}
       >
         <Logo
           width={24}
           height={24}
-          fill={
-            isMenuOpen ? "var(--primary-color)" : "var(--secondary-text-color)"
-          }
+          fill={isMenuOpen ? theme.vars.primary : theme.vars.secondaryTextColor}
         />
-      </div>
+      </button>
       <CSSTransition
         nodeRef={menuRef}
         in={isMenuOpen}
@@ -31,6 +32,6 @@ export const Root = () => {
       >
         <GptMenu ref={menuRef} />
       </CSSTransition>
-    </div>
+    </>
   );
 };

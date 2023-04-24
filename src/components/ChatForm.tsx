@@ -3,11 +3,14 @@ import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import { FaPlay } from "react-icons/fa";
 import { MdContentCopy, MdOutlineInput } from "react-icons/md";
 import { useChat } from "../hooks/useChat";
+import { useTheme } from "../context/themeProvider";
 
 export const ChatForm = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [hoveredId, setHoveredId] = useState<string>("");
   const { error, generate, loading, messages } = useChat();
+  const theme = useTheme();
+
   const messageGroups = useMemo(() => {
     const groups: {
       role: ChatCompletionRequestMessageRoleEnum;
@@ -35,7 +38,7 @@ export const ChatForm = () => {
             : ""
         }`}
         style={{
-          backgroundColor: "var(--input-search-background-color)",
+          backgroundColor: theme.vars.inputSearchBackgroundColor,
           minHeight: "250px",
           border: "1px solid hsl(220 13.376% 69.216% / 0.2)",
           maxHeight: "350px"
@@ -49,10 +52,10 @@ export const ChatForm = () => {
         {messageGroups.map((group, g_idx) => (
           <div
             key={group.role + g_idx}
-            className={`flex w-full mb-3 ${
+            className={`flex flex-col w-full gap-3 mb-3 ${
               group.role === ChatCompletionRequestMessageRoleEnum.Assistant
-                ? "justify-start"
-                : "justify-end"
+                ? "items-start"
+                : "items-end"
             }`}
           >
             {group.messages.map((message, m_idx) => (
@@ -63,8 +66,7 @@ export const ChatForm = () => {
                   onMouseEnter={() => setHoveredId(message + g_idx + m_idx)}
                   onMouseLeave={() => setHoveredId("")}
                   style={{
-                    backgroundColor:
-                      "var(--light-filled-message-out-primary-color)",
+                    backgroundColor: theme.vars.messageBackground,
                     minWidth: 40
                   }}
                 >
@@ -81,8 +83,7 @@ export const ChatForm = () => {
                       <button
                         className="btn btn-square btn-sm"
                         style={{
-                          backgroundColor:
-                            "var(--light-filled-message-primary-color)"
+                          backgroundColor: theme.vars.tooltipBackground
                         }}
                         onClick={() => {
                           navigator.clipboard.writeText(message);
@@ -90,37 +91,37 @@ export const ChatForm = () => {
                       >
                         <MdContentCopy
                           style={{
-                            fill: "var(--primary-color)"
+                            fill: theme.vars.primary
                           }}
                         />
                       </button>
                       <button
                         className="btn btn-square btn-sm"
                         style={{
-                          backgroundColor:
-                            "var(--light-filled-message-primary-color)"
+                          backgroundColor: theme.vars.tooltipBackground
                         }}
                         onClick={() => {
                           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                           document.querySelector(
-                            ".input-message-input.i18n.scrollable.scrollable-y.no-scrollbar"
+                            theme.selectors.chatInput
                           )!.textContent = message;
                           document
-                            .querySelector(
-                              ".input-message-input.i18n.scrollable.scrollable-y.no-scrollbar"
-                            )
+                            .querySelector(theme.selectors.chatInput)
                             ?.dispatchEvent(new Event("input"));
+                          document
+                            .querySelector(theme.selectors.chatInput)
+                            ?.dispatchEvent(new Event("change"));
                         }}
                       >
                         <MdOutlineInput
                           style={{
-                            fill: "var(--primary-color)"
+                            fill: theme.vars.primary
                           }}
                         />
                       </button>
                     </div>
                   ) : null}
-                  <span style={{ color: "var(--primary-text-color))" }}>
+                  <span style={{ color: theme.vars.primaryTextColor }}>
                     {message}
                   </span>
                 </div>
@@ -132,24 +133,24 @@ export const ChatForm = () => {
           <div
             className="px-3 py-1.5 text-sm rounded-md shadow-sm w-9"
             style={{
-              backgroundColor: "var(--light-filled-message-out-primary-color)"
+              backgroundColor: theme.vars.messageBackground
             }}
           >
             <span
               className="loading-dot"
-              style={{ color: "var(--primary-text-color))" }}
+              style={{ color: theme.vars.primaryTextColor }}
             >
               .
             </span>
             <span
               className="loading-dot"
-              style={{ color: "var(--primary-text-color))" }}
+              style={{ color: theme.vars.primaryTextColor }}
             >
               .
             </span>
             <span
               className="loading-dot"
-              style={{ color: "var(--primary-text-color))" }}
+              style={{ color: theme.vars.primaryTextColor }}
             >
               .
             </span>
@@ -163,41 +164,44 @@ export const ChatForm = () => {
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={(e) => {
+            if (loading) return;
             if (e.key === "Enter") {
               e.preventDefault();
               generate(inputMessage);
               setInputMessage("");
+              e.target.dispatchEvent(new Event("blur"));
             }
           }}
+          readOnly={loading}
           placeholder={"Please enter a message"}
           style={{
             resize: "none",
-            backgroundColor: "var(--input-search-background-color)",
-            color: "var(--secondary-text-color)"
+            backgroundColor: theme.vars.inputSearchBackgroundColor,
+            color: theme.vars.secondaryTextColor
           }}
           className="input input-bordered rounded-lg w-full shadow-sm"
         />
         {loading ? (
           <button
-            className="btn btn-square btn-outline"
-            style={{ backgroundColor: "var(--primary-color)", color: "white" }}
-            disabled={!inputMessage}
+            className={`btn btn-square btn-outline`}
+            style={{ backgroundColor: theme.vars.primary, color: "white" }}
             onClick={() => {
               generate(inputMessage);
               setInputMessage("");
             }}
+            disabled={!inputMessage}
           >
             ...
           </button>
         ) : (
           <button
-            className="btn btn-square btn-outline"
-            style={{ backgroundColor: "var(--primary-color)", color: "white" }}
-            disabled={!inputMessage}
+            className={`btn btn-square btn-outline`}
+            style={{ backgroundColor: theme.vars.primary, color: "white" }}
             onClick={() => {
               generate(inputMessage);
               setInputMessage("");
             }}
+            disabled={!inputMessage}
           >
             <FaPlay style={{ fontSize: "1.2rem" }} />
           </button>

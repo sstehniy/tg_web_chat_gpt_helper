@@ -3,31 +3,41 @@ import { Root } from "./Root";
 import "./style.css";
 import { ChatObserverProvider } from "./context/chatObserver";
 import { OpenaiClientProvider } from "./context/openaiClient";
+import { TelegramTheme, tgSelectorsAndStyles } from "./tgSelectorsAndStyles";
+import { ThemeProvider } from "./context/themeProvider";
 
-const renderK = () => {
+const render = (theme: TelegramTheme, rootNode: string) => {
   const appContainer = document.querySelector("#tg_gpt_helper_root");
   if (appContainer) {
     document.removeChild(appContainer);
   }
-  const input = document.querySelector(".new-message-wrapper");
+  const input = document.querySelector(rootNode);
   if (!input) return;
   const container = document.createElement("div");
   container.style.position = "static";
+  if (theme.classNames.attachMenu) {
+    container.classList.add(theme.classNames.attachMenu);
+  }
   input.append(container);
   const root = createRoot(container);
   root.render(
-    <ChatObserverProvider>
-      <OpenaiClientProvider>
-        <Root />
-      </OpenaiClientProvider>
-    </ChatObserverProvider>
+    <ThemeProvider theme={theme}>
+      <ChatObserverProvider>
+        <OpenaiClientProvider>
+          <Root />
+        </OpenaiClientProvider>
+      </ChatObserverProvider>
+    </ThemeProvider>
   );
 };
 
 const observer = new MutationObserver(() => {
-  console.log("here");
   if (document.querySelector(".new-message-wrapper")) {
-    renderK();
+    render(tgSelectorsAndStyles.k, ".new-message-wrapper");
+    observer.disconnect();
+  }
+  if (document.querySelector(".message-input-wrapper")) {
+    render(tgSelectorsAndStyles.z, ".message-input-wrapper");
     observer.disconnect();
   }
 });

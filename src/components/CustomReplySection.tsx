@@ -13,11 +13,11 @@ import { useChatCompelition } from "../hooks/useChatCompelition";
 import { useChatObserver } from "../context/chatObserver";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { ResponseSuggestions } from "./ResponseSuggestions";
+import { useTheme } from "../context/themeProvider";
 
 const consturctCustomPrompt = (
   targetMessage: ContextMessage,
   contextMessages: ContextMessage[],
-  customLanguage: string,
   customTone: string,
   customStyle: string
 ): ChatCompletionRequestMessage[] => {
@@ -39,26 +39,15 @@ const consturctCustomPrompt = (
     content: ` SELECTED: ${targetMessage.content}`,
     role: "user"
   });
-  console.log(customLanguage);
   const promptTemplate = prompts.CUSTOM_PROMPT;
   const requestPrompt = promptTemplate
-    .replace(
-      "{{OUTPUT_LANGUAGE}}",
-      customLanguage === "Default language"
-        ? "the primary language of the conversation"
-        : customLanguage
-    )
     .replace("{{OUTPUT_TONE}}", customTone)
     .replace("{{OUTPUT_WRITING_STYLE}}", customStyle);
 
-  console.log([{ content: requestPrompt, role: "user" }, ...logsMessages]);
   return [{ content: requestPrompt, role: "user" }, ...logsMessages];
 };
 
 export const CustomReplySection = () => {
-  const [customLanguage, setCustomLanguage] = useState<string>(
-    customPromptLanguages[0]
-  );
   const [customStyle, setCustomStyle] = useState<string>(customPromptStyles[0]);
   const [customTone, setCustomTone] = useState<string>(customPromptTones[0]);
   const [selectedCustomReplyIdx, setSelectedCustomReplyIdx] =
@@ -66,6 +55,7 @@ export const CustomReplySection = () => {
   const { error, generate, loading, messages } = useChatCompelition();
   const { selectedMessage, handleUpdateContextMessages, contextMessages } =
     useChatObserver();
+  const theme = useTheme();
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -74,9 +64,9 @@ export const CustomReplySection = () => {
   }, [messages]);
   return (
     <div>
-      <label className="label pt-0 pb-0.5" htmlFor="selected_message">
+      <label className="label mb-0 pt-0 pb-0.5" htmlFor="selected_message">
         <span
-          style={{ color: "var(--secondary-text-color)" }}
+          style={{ color: theme.vars.secondaryTextColor }}
           className="label-text"
         >
           Tell how you want to reply the message
@@ -84,9 +74,9 @@ export const CustomReplySection = () => {
       </label>
       <div className="flex mt-3 gap-2 justify-between">
         <div>
-          <label className="label pt-0 pb-0.5" htmlFor="tone_select">
+          <label className="label mb-0 pt-0 pb-0.5" htmlFor="tone_select">
             <span
-              style={{ color: "var(--secondary-text-color)" }}
+              style={{ color: theme.vars.secondaryTextColor }}
               className="label-text"
             >
               Tone
@@ -96,13 +86,12 @@ export const CustomReplySection = () => {
             className="select select-bordered"
             style={{
               backgroundColor: "transparent",
-              color: "var(--primary-text-color)"
+              color: theme.vars.primaryTextColor
             }}
             value={customTone}
             name="tone_select"
             id="tone_select"
             onChange={(e) => {
-              console.log(e.target.value);
               setCustomTone(e.target.value);
             }}
           >
@@ -114,9 +103,9 @@ export const CustomReplySection = () => {
           </select>
         </div>
         <div>
-          <label className="label pt-0 pb-0.5" htmlFor="style_select">
+          <label className="label mb-0 pt-0 pb-0.5" htmlFor="style_select">
             <span
-              style={{ color: "var(--secondary-text-color)" }}
+              style={{ color: theme.vars.secondaryTextColor }}
               className="label-text"
             >
               Writing Style
@@ -126,13 +115,12 @@ export const CustomReplySection = () => {
             className="select select-bordered"
             style={{
               backgroundColor: "transparent",
-              color: "var(--primary-text-color)"
+              color: theme.vars.primaryTextColor
             }}
             value={customStyle}
             name="style_select"
             id="style_select"
             onChange={(e) => {
-              console.log(e.target.value);
               setCustomStyle(e.target.value);
             }}
           >
@@ -146,9 +134,9 @@ export const CustomReplySection = () => {
         <div className="flex flex-col justify-end">
           {loading ? (
             <button
-              className="btn btn-square btn-outline gap-2"
+              className={`btn btn-square btn-outline gap-2`}
               style={{
-                backgroundColor: "var(--primary-color)",
+                backgroundColor: theme.vars.primary,
                 color: "white"
               }}
               disabled={!selectedMessage || loading}
@@ -157,12 +145,11 @@ export const CustomReplySection = () => {
             </button>
           ) : messages.length ? (
             <button
-              className="btn btn-square btn-outline gap-2"
+              className={`btn btn-square ${!selectedMessage} btn-outline gap-2`}
               style={{
-                backgroundColor: "var(--primary-color)",
+                backgroundColor: theme.vars.primary,
                 color: "white"
               }}
-              disabled={!selectedMessage}
               onClick={() => {
                 if (!selectedMessage) return;
                 handleUpdateContextMessages();
@@ -170,8 +157,6 @@ export const CustomReplySection = () => {
                   consturctCustomPrompt(
                     selectedMessage,
                     contextMessages,
-
-                    customLanguage,
                     customTone,
                     customStyle
                   )
@@ -186,9 +171,9 @@ export const CustomReplySection = () => {
             </button>
           ) : (
             <button
-              className="btn btn-square btn-outline gap-2"
+              className={`btn btn-square  btn-outline gap-2`}
               style={{
-                backgroundColor: "var(--primary-color)",
+                backgroundColor: theme.vars.primary,
                 color: "white"
               }}
               disabled={!selectedMessage}
@@ -199,7 +184,6 @@ export const CustomReplySection = () => {
                   consturctCustomPrompt(
                     selectedMessage,
                     contextMessages,
-                    customLanguage,
                     customTone,
                     customStyle
                   )
@@ -214,9 +198,9 @@ export const CustomReplySection = () => {
 
       {messages.length > 0 && (
         <div className="w-full mt-2">
-          <label className="label pb-1" htmlFor="smart_reply_output">
+          <label className="label mb-0 pb-1" htmlFor="smart_reply_output">
             <span
-              style={{ color: "var(--secondary-text-color)" }}
+              style={{ color: theme.vars.secondaryTextColor }}
               className="label-text"
             >
               Generated suggestion

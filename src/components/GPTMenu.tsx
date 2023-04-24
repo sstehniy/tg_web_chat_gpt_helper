@@ -5,6 +5,7 @@ import { BiChat } from "react-icons/bi";
 import { ChatForm } from "./ChatForm";
 import { MdQuickreply } from "react-icons/md";
 import { useOpenaiClient } from "../context/openaiClient";
+import { useTheme } from "../context/themeProvider";
 
 export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
   const { isAuthorized } = useOpenaiClient();
@@ -12,11 +13,12 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
   const [activeTab, setActiveTab] = useState<"smart_reply" | "chat">(
     "smart_reply"
   );
+  const theme = useTheme();
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const inputHeight = document
-        .querySelector(".chat-input-container")
+        .querySelector(theme.selectors.chatInputContainer)
         ?.getBoundingClientRect().height;
       if (inputHeight && inputHeight !== menuBottomProp) {
         setMenuBottomProp(inputHeight - 18);
@@ -30,14 +32,14 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
     return () => {
       observer.disconnect();
     };
-  }, [menuBottomProp]);
+  }, [menuBottomProp, theme]);
 
   return (
     <ul
-      className="text text-lg !ps-4 p-4 rounded-2xl absolute  right-0 shadow-xl"
+      className="gpt-menu text text-lg !ps-4 p-4 rounded-2xl absolute  right-0 shadow-xl"
       style={{
-        backgroundColor: "var(--surface-color)",
-        color: "var(--primary-text-color)",
+        backgroundColor: theme.vars.surfaceColor,
+        color: theme.vars.primaryTextColor,
         bottom: menuBottomProp
       }}
       ref={ref}
@@ -51,8 +53,8 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
               color: "white",
               backgroundColor:
                 activeTab === "smart_reply"
-                  ? "var(--primary-color)"
-                  : "var(--secondary-color)"
+                  ? theme.vars.primary
+                  : theme.vars.secondary
             }}
           >
             <MdQuickreply style={{ fontSize: "1.3rem" }} />
@@ -64,9 +66,7 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
             style={{
               color: "white",
               backgroundColor:
-                activeTab === "chat"
-                  ? "var(--primary-color)"
-                  : "var(--secondary-color)"
+                activeTab === "chat" ? theme.vars.primary : theme.vars.secondary
             }}
           >
             <BiChat style={{ fontSize: "1.3rem" }} />

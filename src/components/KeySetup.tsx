@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useOpenaiClient } from "../context/openaiClient";
+import { useTheme } from "../context/themeProvider";
 
 export const KeySetup = () => {
   const { handleSetToken } = useOpenaiClient();
   const [inputToken, setInputToken] = useState("");
   const [showInputError, setShowInputError] = useState(false);
+  const theme = useTheme();
   return (
     <form
       autoComplete="off"
@@ -12,7 +14,7 @@ export const KeySetup = () => {
       className="mt-2"
     >
       <div className="form-control">
-        <label className="label">
+        <label className="label mb-0 mb-0">
           <span className="label-text">
             Please enter your OpenAI API-Key to start using the assistant
           </span>
@@ -30,14 +32,14 @@ export const KeySetup = () => {
               setInputToken(e.target.value);
             }}
             style={{
-              backgroundColor: "var(--input-search-background-color)"
+              backgroundColor: theme.vars.inputSearchBackgroundColor
             }}
             className="input input-sm input-bordered rounded-lg w-full  shadow-md"
           />
           <button
             className="btn btn-sm"
             style={{
-              backgroundColor: "var(--primary-color)",
+              backgroundColor: theme.vars.primary,
               color: "white"
             }}
             onClick={(e) => {
@@ -54,7 +56,7 @@ export const KeySetup = () => {
           </button>
         </div>
 
-        <label className="label">
+        <label className="label mb-0 mb-0">
           <span className="label-text-alt text-red-500">
             {showInputError && "Field is empty!"}
           </span>
