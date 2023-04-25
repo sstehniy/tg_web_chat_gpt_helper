@@ -1,13 +1,34 @@
 import { ReactComponent as Logo } from "./assets/chat_gpt_logo.svg";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { GptMenu } from "./components/GptMenu";
 import { useTheme } from "./context/themeProvider";
 
 export const Root = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuBottomProp, setMenuBottomProp] = useState(0);
+
   const menuRef = useRef(null);
   const theme = useTheme();
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const inputHeight = document
+        .querySelector(theme.selectors.chatInputContainer)
+        ?.getBoundingClientRect().height;
+      if (inputHeight && inputHeight !== menuBottomProp) {
+        setMenuBottomProp(inputHeight - 10);
+      }
+    });
+    observer.observe(document.body, {
+      attributes: true,
+      childList: true,
+      subtree: true
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, [menuBottomProp, theme]);
 
   return (
     <>
@@ -23,15 +44,24 @@ export const Root = () => {
           fill={isMenuOpen ? theme.vars.primary : theme.vars.secondaryTextColor}
         />
       </button>
-      <CSSTransition
-        nodeRef={menuRef}
-        in={isMenuOpen}
-        timeout={200}
-        classNames="menu"
-        unmountOnExit
+      <div
+        style={{
+          position: "absolute",
+          bottom: menuBottomProp,
+          right: 0,
+          transition: "bottom 0.2s ease-in-out"
+        }}
       >
-        <GptMenu ref={menuRef} />
-      </CSSTransition>
+        <CSSTransition
+          nodeRef={menuRef}
+          in={isMenuOpen}
+          timeout={200}
+          classNames="gpt-menu"
+          unmountOnExit
+        >
+          <GptMenu ref={menuRef} />
+        </CSSTransition>
+      </div>
     </>
   );
 };

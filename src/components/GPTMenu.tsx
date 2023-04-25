@@ -7,40 +7,19 @@ import { MdQuickreply } from "react-icons/md";
 import { useOpenaiClient } from "../context/openaiClient";
 import { useTheme } from "../context/themeProvider";
 
-export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
+export const GptMenu = forwardRef<HTMLDivElement, unknown>((_, ref) => {
   const { isAuthorized } = useOpenaiClient();
-  const [menuBottomProp, setMenuBottomProp] = useState(0);
   const [activeTab, setActiveTab] = useState<"smart_reply" | "chat">(
     "smart_reply"
   );
   const theme = useTheme();
 
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      const inputHeight = document
-        .querySelector(theme.selectors.chatInputContainer)
-        ?.getBoundingClientRect().height;
-      if (inputHeight && inputHeight !== menuBottomProp) {
-        setMenuBottomProp(inputHeight - 18);
-      }
-    });
-    observer.observe(document.body, {
-      attributes: true,
-      childList: true,
-      subtree: true
-    });
-    return () => {
-      observer.disconnect();
-    };
-  }, [menuBottomProp, theme]);
-
   return (
-    <ul
-      className="gpt-menu text text-lg !ps-4 p-4 rounded-2xl absolute  right-0 shadow-xl"
+    <div
+      className="gpt-menu text text-lg !ps-4 p-4 rounded-2xl  right-0 shadow-xl"
       style={{
         backgroundColor: theme.vars.surfaceColor,
-        color: theme.vars.primaryTextColor,
-        bottom: menuBottomProp
+        color: theme.vars.primaryTextColor
       }}
       ref={ref}
     >
@@ -88,6 +67,6 @@ export const GptMenu = forwardRef<HTMLUListElement, unknown>((_, ref) => {
           </div>
         </>
       )}
-    </ul>
+    </div>
   );
 });
