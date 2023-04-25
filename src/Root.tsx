@@ -7,6 +7,7 @@ import { useTheme } from "./context/themeProvider";
 export const Root = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuBottomProp, setMenuBottomProp] = useState(0);
+  const [hide, setHide] = useState(true);
 
   const menuRef = useRef(null);
   const theme = useTheme();
@@ -49,6 +50,7 @@ export const Root = () => {
           position: "absolute",
           bottom: menuBottomProp,
           right: 0,
+          display: hide ? "none" : "block",
           transition: "bottom 0.2s ease-in-out"
         }}
       >
@@ -57,7 +59,12 @@ export const Root = () => {
           in={isMenuOpen}
           timeout={200}
           classNames="gpt-menu"
-          unmountOnExit
+          onEnter={() => {
+            setHide(false);
+          }}
+          onExited={() => {
+            setHide(true);
+          }}
         >
           <GptMenu ref={menuRef} />
         </CSSTransition>
