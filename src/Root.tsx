@@ -20,7 +20,6 @@ export const Root = () => {
     },
     (e) => {
       if (!buttonRef.current || !e.target) return false;
-      console.log(e.target, buttonRef.current);
       return (
         // Prevents the menu from closing when the button is clicked
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
