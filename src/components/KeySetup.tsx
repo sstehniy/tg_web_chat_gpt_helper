@@ -14,7 +14,7 @@ export const KeySetup = () => {
       className="mt-2"
     >
       <div className="form-control">
-        <label className="label mb-0 mb-0">
+        <label className="label mb-0">
           <span className="label-text">
             Please enter your OpenAI API-Key to start using the assistant
           </span>

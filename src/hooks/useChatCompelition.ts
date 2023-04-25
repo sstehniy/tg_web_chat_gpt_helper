@@ -1,6 +1,5 @@
 import { ChatCompletionRequestMessage } from "openai";
 import { useCallback, useEffect, useState } from "react";
-
 import { useChatObserver } from "../context/chatObserver";
 import { baseApiOptions, useOpenaiClient } from "../context/openaiClient";
 

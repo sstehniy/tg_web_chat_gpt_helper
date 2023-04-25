@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useState } from "react";
 import { KeySetup } from "./KeySetup";
 import { ReplyForm } from "./ReplyForm";
 import { BiChat } from "react-icons/bi";

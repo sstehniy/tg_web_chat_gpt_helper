@@ -1,12 +1,7 @@
 import { ChatCompletionRequestMessage } from "openai";
 import { useState, useEffect } from "react";
-import { FaPlay, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { MdContentCopy, MdOutlineInput } from "react-icons/md";
-import {
-  customPromptLanguages,
-  customPromptStyles,
-  customPromptTones
-} from "../constants";
+import { FaPlay } from "react-icons/fa";
+import { customPromptStyles, customPromptTones } from "../constants";
 import { prompts } from "../propmpts_config";
 import { ContextMessage } from "../types";
 import { useChatCompelition } from "../hooks/useChatCompelition";

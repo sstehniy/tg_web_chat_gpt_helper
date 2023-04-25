@@ -6,8 +6,6 @@ import { useChatCompelition } from "../hooks/useChatCompelition";
 import { useChatObserver } from "../context/chatObserver";
 import { BsFillLightningChargeFill } from "react-icons/bs";
 import { HiOutlineRefresh } from "react-icons/hi";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { MdContentCopy, MdOutlineInput } from "react-icons/md";
 import { ResponseSuggestions } from "./ResponseSuggestions";
 import { useTheme } from "../context/themeProvider";
 

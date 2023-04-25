@@ -2,7 +2,7 @@ import {
   ChatCompletionRequestMessage,
   ChatCompletionRequestMessageRoleEnum
 } from "openai";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { baseApiOptions, useOpenaiClient } from "../context/openaiClient";
 
 export function useChat() {

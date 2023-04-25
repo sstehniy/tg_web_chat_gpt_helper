@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import ReactSelect, { SingleValue } from "react-select";
 import { useTheme } from "../context/themeProvider";
 

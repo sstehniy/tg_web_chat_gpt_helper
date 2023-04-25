@@ -8,7 +8,7 @@ import { useTheme } from "../context/themeProvider";
 export const ChatForm = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [hoveredId, setHoveredId] = useState<string>("");
-  const { error, generate, loading, messages } = useChat();
+  const { generate, loading, messages } = useChat();
   const theme = useTheme();
 
   const messageGroups = useMemo(() => {
