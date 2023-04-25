@@ -25,7 +25,7 @@ export const Select: FC<SelectProps> = ({ onChange, options }) => {
             ...provided,
             backgroundColor: theme.vars.inputSearchBackgroundColor,
             color: theme.vars.primaryTextColor,
-            borderColor: theme.vars.secondary,
+            borderColor: "hsl(var(--bc) / var(--tw-border-opacity))",
             borderWidth: "2px",
             borderRadius: "0.5rem",
             boxShadow: state.isFocused
@@ -44,7 +44,8 @@ export const Select: FC<SelectProps> = ({ onChange, options }) => {
               : theme.vars.surfaceColor,
             color: theme.vars.primaryTextColor,
             cursor: "pointer",
-            padding: "0.5rem 1rem"
+            padding: "0.5rem 1rem",
+            fontSize: "1rem"
           }),
           menu: (provided) => ({
             ...provided,
