@@ -14,6 +14,7 @@ import { useChatObserver } from "../context/chatObserver";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { ResponseSuggestions } from "./ResponseSuggestions";
 import { useTheme } from "../context/themeProvider";
+import { Select } from "./Select";
 
 const consturctCustomPrompt = (
   targetMessage: ContextMessage,
@@ -73,7 +74,7 @@ export const CustomReplySection = () => {
         </span>
       </label>
       <div className="flex mt-3 gap-2 justify-between">
-        <div>
+        <div className="flex-1">
           <label className="label mb-0 pt-0 pb-0.5" htmlFor="tone_select">
             <span
               style={{ color: theme.vars.secondaryTextColor }}
@@ -82,27 +83,18 @@ export const CustomReplySection = () => {
               Tone
             </span>
           </label>
-          <select
-            className="select select-bordered"
-            style={{
-              backgroundColor: "transparent",
-              color: theme.vars.primaryTextColor
+          <Select
+            options={customPromptTones.map((tone) => ({
+              label: tone,
+              value: tone
+            }))}
+            onChange={(val) => {
+              if (!val) return;
+              setCustomTone(val.value);
             }}
-            value={customTone}
-            name="tone_select"
-            id="tone_select"
-            onChange={(e) => {
-              setCustomTone(e.target.value);
-            }}
-          >
-            {customPromptTones.map((tone, idx) => (
-              <option key={"tone_" + tone.toLowerCase() + idx} value={tone}>
-                {tone}
-              </option>
-            ))}
-          </select>
+          />
         </div>
-        <div>
+        <div className="flex-1">
           <label className="label mb-0 pt-0 pb-0.5" htmlFor="style_select">
             <span
               style={{ color: theme.vars.secondaryTextColor }}
@@ -111,25 +103,16 @@ export const CustomReplySection = () => {
               Writing Style
             </span>
           </label>
-          <select
-            className="select select-bordered"
-            style={{
-              backgroundColor: "transparent",
-              color: theme.vars.primaryTextColor
+          <Select
+            options={customPromptStyles.map((tone) => ({
+              label: tone,
+              value: tone
+            }))}
+            onChange={(val) => {
+              if (!val) return;
+              setCustomStyle(val.value);
             }}
-            value={customStyle}
-            name="style_select"
-            id="style_select"
-            onChange={(e) => {
-              setCustomStyle(e.target.value);
-            }}
-          >
-            {customPromptStyles.map((style, idx) => (
-              <option key={"style_" + style.toLowerCase() + idx} value={style}>
-                {style}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <div className="flex flex-col justify-end">
           {loading ? (
