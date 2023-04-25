@@ -62,8 +62,8 @@ export const ResponseSuggestions: FC<ResponseSuggestionsProps> = ({
         </button>
       </div>
       <textarea
-        rows={1}
-        className="ps-20 textarea textarea-bordered w-full pe-14 h-14"
+        rows={2}
+        className="ps-20 textarea textarea-bordered w-full pe-14"
         value={suggestions[selectedSuggestionIndex]}
         style={{
           backgroundColor: theme.vars.inputSearchBackgroundColor,
