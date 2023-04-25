@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { GptMenu } from "./components/GptMenu";
 import { useTheme } from "./context/themeProvider";
+import { useClickOutside } from "./hooks/useClickOutside";
 
 export const Root = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +11,25 @@ export const Root = () => {
   const [hide, setHide] = useState(true);
 
   const menuRef = useRef(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const theme = useTheme();
+  useClickOutside(
+    menuRef,
+    () => {
+      setIsMenuOpen(false);
+    },
+    (e) => {
+      if (!buttonRef.current || !e.target) return false;
+      console.log(e.target, buttonRef.current);
+      return (
+        // Prevents the menu from closing when the button is clicked
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        e.target.id === buttonRef.current.id ||
+        buttonRef.current.contains(e.target as Node)
+      );
+    }
+  );
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -34,9 +53,11 @@ export const Root = () => {
   return (
     <>
       <button
+        id="tg_gpt_helper_button"
         className={`btn-icon ${theme.classNames.attachFile} ${
           isMenuOpen ? theme.classNames.menuOpen : ""
         }`}
+        ref={buttonRef}
         onClick={() => setIsMenuOpen((prev) => !prev)}
       >
         <Logo
