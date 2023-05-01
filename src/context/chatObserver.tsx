@@ -35,12 +35,21 @@ export const ChatObserverProvider: FC<PropsWithChildren<unknown>> = ({
   const theme = useTheme();
 
   useEffect(() => {
-    const handleOnMessage = (message: any) => {
+    const handleOnMessage = (
+      message: any,
+      _: any,
+      sendResponse: (response?: any) => void
+    ) => {
       if (message.url !== updatedUrl) {
         setUpdatedUrl(message.url);
       }
+      sendResponse();
     };
     chrome.runtime.onMessage.addListener(handleOnMessage);
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(handleOnMessage);
+    };
   }, [updatedUrl]);
 
   const handleUpdateContextMessages = useCallback(() => {

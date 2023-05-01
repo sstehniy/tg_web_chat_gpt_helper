@@ -22,11 +22,11 @@ const render = (theme: TelegramTheme, rootNode: string) => {
   const root = createRoot(container);
   root.render(
     <ThemeProvider theme={theme}>
-      <ChatObserverProvider>
-        <OpenaiClientProvider>
+      <OpenaiClientProvider>
+        <ChatObserverProvider>
           <Root />
-        </OpenaiClientProvider>
-      </ChatObserverProvider>
+        </ChatObserverProvider>
+      </OpenaiClientProvider>
     </ThemeProvider>
   );
 };
@@ -41,4 +41,4 @@ const observer = new MutationObserver(() => {
     observer.disconnect();
   }
 });
-observer.observe(document.body, { childList: true });
+observer.observe(document.body, { childList: true, subtree: true });
