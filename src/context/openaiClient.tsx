@@ -11,7 +11,7 @@ import {
 } from "react";
 
 export const baseApiOptions = {
-  model: "gpt-3.5-turbo",
+  model: "gpt-4",
   top_p: 0.7,
   temperature: 0.5,
   max_tokens: 250

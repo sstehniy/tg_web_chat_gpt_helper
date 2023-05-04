@@ -7,9 +7,8 @@
     "https://web.telegram.org/*"
   ],
   "permissions": [
-    "activeTab", "tabs", "nativeMessaging",
-    "storage",
-    "scripting"
+    "activeTab", "tabs",
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"
