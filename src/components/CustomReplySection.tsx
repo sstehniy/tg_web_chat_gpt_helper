@@ -40,7 +40,7 @@ const consturctCustomPrompt = (
     .replace("{{OUTPUT_TONE}}", customTone)
     .replace("{{OUTPUT_WRITING_STYLE}}", customStyle);
 
-  return [{ content: requestPrompt, role: "user" }, ...logsMessages];
+  return [{ content: requestPrompt, role: "system" }, ...logsMessages];
 };
 
 export const CustomReplySection = () => {

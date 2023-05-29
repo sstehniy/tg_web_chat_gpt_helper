@@ -29,6 +29,7 @@ export const ChatForm = () => {
     });
     return groups;
   }, [messages]);
+
   return (
     <div className="w-80">
       <div

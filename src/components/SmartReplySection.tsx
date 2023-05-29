@@ -33,7 +33,7 @@ const consturctSmartPrompt = (
     role: "user"
   });
 
-  return [{ content: prompts.SMART_PROMPT, role: "user" }, ...logsMessages];
+  return [{ content: prompts.SMART_PROMPT, role: "system" }, ...logsMessages];
 };
 
 export const SmartReplySection = () => {
