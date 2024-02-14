@@ -8,7 +8,7 @@ export function useChatCompelition() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { updatedUrl, selectedMessage } = useChatObserver();
-  const { client } = useOpenaiClient();
+  const { client, selectedModel } = useOpenaiClient();
 
   useEffect(() => {
     setMessages([]);
@@ -21,6 +21,7 @@ export function useChatCompelition() {
         setLoading(true);
         const response = await client.createChatCompletion({
           ...baseApiOptions,
+          model: selectedModel.value,
           messages
         });
 
@@ -39,7 +40,7 @@ export function useChatCompelition() {
         setLoading(false);
       }
     },
-    [client]
+    [client, selectedModel.value]
   );
   return { messages, loading, error, generate };
 }

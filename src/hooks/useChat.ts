@@ -9,7 +9,7 @@ export function useChat() {
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const { client } = useOpenaiClient();
+  const { client, selectedModel } = useOpenaiClient();
 
   const fetchResponse = useCallback(
     async (messages: ChatCompletionRequestMessage[]) => {
@@ -17,6 +17,7 @@ export function useChat() {
         setLoading(true);
         const response = await client.createChatCompletion({
           ...baseApiOptions,
+          model: selectedModel.value,
           messages
         });
         let responseText = response.data.choices[0].message?.content;
@@ -40,7 +41,7 @@ export function useChat() {
         setLoading(false);
       }
     },
-    [client]
+    [client, selectedModel.value]
   );
 
   const generate = useCallback(

@@ -41,8 +41,8 @@ export const tgSelectorsAndStyles: Record<"k" | "z", TelegramTheme> = {
         ".message.spoilers-container:not(.call-message):not(.document-message)",
       userTitle: ".top .user-title",
       helperActive: ".chat.tabs-tab.active.is-helper-active",
-      replyToPeer: ".reply-wrapper .reply-title > .peer-title",
-      replyContent: ".reply-wrapper .reply-subtitle",
+      replyToPeer: ".reply-wrapper .reply-content .reply-title .peer-title",
+      replyContent: ".reply-wrapper .reply-content .reply-subtitle",
       chatInputContainer: ".chat-input-container",
       chatInput:
         ".input-message-input.i18n.scrollable.scrollable-y.no-scrollbar"

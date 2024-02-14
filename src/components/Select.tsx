@@ -5,9 +5,16 @@ import { useTheme } from "../context/themeProvider";
 type SelectProps = {
   options: { value: string; label: string }[];
   onChange: (value: SingleValue<{ value: string; label: string }>) => void;
+  isSearchable?: boolean;
+  placement?: "top" | "bottom";
 };
 
-export const Select: FC<SelectProps> = ({ onChange, options }) => {
+export const Select: FC<SelectProps> = ({
+  onChange,
+  options,
+  isSearchable = true,
+  placement = "top"
+}) => {
   const theme = useTheme();
   return (
     <div className="w-full">
@@ -19,7 +26,8 @@ export const Select: FC<SelectProps> = ({ onChange, options }) => {
         }}
         maxMenuHeight={200}
         defaultValue={options[0]}
-        menuPlacement="top"
+        menuPlacement={placement}
+        isSearchable={isSearchable}
         styles={{
           control: (provided, state) => ({
             ...provided,

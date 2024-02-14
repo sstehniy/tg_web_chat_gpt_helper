@@ -11,16 +11,23 @@ import {
 } from "react";
 
 export const baseApiOptions = {
-  model: "gpt-3.5-turbo",
   top_p: 0.7,
   temperature: 0.5,
-  max_tokens: 250
+  max_tokens: 500
 };
+
+export const availableModels = [
+  { label: "GPT 4 Turbo", value: "gpt-4-0125-preview" },
+  { label: "GPT 3.5 Turbo", value: "gpt-3.5-turbo-0125" },
+  { label: "GPT 4", value: "gpt-4" }
+] as const;
 
 type OpenAiClientContextType = {
   isAuthorized: boolean;
   client: OpenAIApi;
   handleSetToken: (token: string) => void;
+  selectedModel: (typeof availableModels)[number];
+  setSelectedModel: (model: (typeof availableModels)[number]) => void;
 };
 
 const OpenaiClientContext = createContext<OpenAiClientContextType>(
@@ -36,6 +43,9 @@ export const OpenaiClientProvider: FC<PropsWithChildren<unknown>> = ({
   const [token, setToken] = useState("");
   const clientInitialized = useRef(false);
   const client = useRef<OpenAIApi>(null as unknown as OpenAIApi);
+  const [selectedModel, setSelectedModel] = useState<
+    (typeof availableModels)[number]
+  >(availableModels[0]);
 
   const handleSetToken = useCallback((token: string) => {
     chrome.storage.local.set({ tg_gpt_helper_openai_token: token }, () => {
@@ -72,7 +82,9 @@ export const OpenaiClientProvider: FC<PropsWithChildren<unknown>> = ({
       value={{
         isAuthorized,
         client: client.current,
-        handleSetToken
+        handleSetToken,
+        selectedModel,
+        setSelectedModel
       }}
     >
       {children}
