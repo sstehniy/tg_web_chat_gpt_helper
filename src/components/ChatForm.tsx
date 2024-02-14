@@ -17,6 +17,7 @@ export const ChatForm = () => {
       messages: string[];
     }[] = [];
     messages.forEach((message) => {
+      if (!message.content) return;
       const lastGroup = groups[groups.length - 1];
       if (lastGroup && lastGroup.role === message.role) {
         lastGroup.messages.push(message.content);

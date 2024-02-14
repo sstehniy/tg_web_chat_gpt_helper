@@ -1,7 +1,7 @@
 import { ReactComponent as Logo } from "./assets/chat_gpt_logo.svg";
 import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { GptMenu } from "./components/GptMenu";
+import { GptMenu } from "./components/GPTMenu";
 import { useTheme } from "./context/themeProvider";
 import { useClickOutside } from "./hooks/useClickOutside";
 
