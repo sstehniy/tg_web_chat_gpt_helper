@@ -44,11 +44,11 @@ After installation, navigate to [Telegram Web](https://web.telegram.org). You wi
 
 ### Smart Reply
 
-Select a message in your chat and click on the lightning icon (![lightning icon](src/assets/lightning.svg)) to generate a smart reply.
+Select a message in your chat and click on the lightning icon to generate a smart reply.
 
 ### Custom Reply
 
-Select a message and click on the play icon (![play icon](src/assets/play.svg)) to open the custom reply form. Here, you can specify the desired tone and writing style for the response.
+Select a message and click on the play icon to open the custom reply form. Here, you can specify the desired tone and writing style for the response.
 
 ## Development
 
