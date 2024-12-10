@@ -45,7 +45,7 @@ export const tgSelectorsAndStyles: Record<"k" | "z", TelegramTheme> = {
       replyContent: ".reply-wrapper .reply-content .reply-subtitle",
       chatInputContainer: ".chat-input-container",
       chatInput:
-        ".input-message-input.i18n.scrollable.scrollable-y.no-scrollbar"
+        ".input-message-input.is-empty.scrollable.scrollable-y.no-scrollbar"
     },
     classNames: {
       attachMenu: "",
