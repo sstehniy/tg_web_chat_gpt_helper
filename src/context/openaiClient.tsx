@@ -17,9 +17,8 @@ export const baseApiOptions = {
 };
 
 export const availableModels = [
-  { label: "GPT 4 Turbo", value: "gpt-4-0125-preview" },
-  { label: "GPT 3.5 Turbo", value: "gpt-3.5-turbo-0125" },
-  { label: "GPT 4", value: "gpt-4" }
+  { label: "GPT 4o", value: "gpt-4o" },
+  { label: "GPT 4o Mini", value: "gpt-4o-mini" }
 ] as const;
 
 type OpenAiClientContextType = {
