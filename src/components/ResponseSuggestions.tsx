@@ -74,7 +74,7 @@ export const ResponseSuggestions: FC<ResponseSuggestionsProps> = ({
         readOnly
       />
       <div className="absolute top-2 right-2 flex gap-1.5">
-        <div className="tooltip" data-tip="Copy message">
+        <div className="tooltip p-0" data-tip="Copy message">
           <button
             className="btn-sm px-1"
             onClick={() => {
@@ -90,7 +90,7 @@ export const ResponseSuggestions: FC<ResponseSuggestionsProps> = ({
             />
           </button>
         </div>
-        <div className="tooltip" data-tip="Insert message">
+        <div className="tooltip p-0" data-tip="Insert message">
           <button
             className="btn-sm px-1"
             onClick={() => {
